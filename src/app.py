@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, render_template
+from flask import Flask, render_template
 
 from stock import stock
 
@@ -14,16 +14,6 @@ app.register_blueprint(stock)
 @app.route('/')
 def home():
     return render_template('index.html')
-
-
-# Example API endpoint
-@app.route('/api/data')
-def data():
-    # Sample JSON response
-    return jsonify({
-        "message": "Hello, this is your data!",
-        "status": "success"
-    })
 
 
 # Run the app
