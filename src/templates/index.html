@@ -28,10 +28,11 @@
 			for (const key in tickers.Ticker) {
 
 				const ticker = tickers.Ticker[key];
-				const option = document.createElement('option');
+				const name = tickers.Name[key];
 
+				const option = document.createElement('option');
 				option.value = ticker;
-				option.textContent = ticker;
+				option.textContent = name;
 
 				select.appendChild(option);
 			}
