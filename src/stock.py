@@ -94,6 +94,9 @@ def stock_data():
 	# Download companies data 
 	companies_data = yf.download(companies_tickers, start=start_date, end=end_date, group_by='ticker')
 
+	companies_data.index = pd.to_datetime(companies_data.index)
+	companies_data.index = companies_data.index.strftime('%Y-%m-%d')
+
 	# Return response
 	response = make_response(companies_data.to_json())
 	CORS(response)
