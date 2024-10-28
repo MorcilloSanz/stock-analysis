@@ -13,13 +13,41 @@
 
 </head>
 <body>
-	<script>
-		let tickers = getTickers();
-		console.log(tickers)
 
-		const selected_tickers = ["AAPL", "MSFT", "GOOGL"];
-		let data = getData(selected_tickers)
-		console.log(data);
+	<header></header>
+	<nav></nav>
+
+	<select id="tickers" multiple></select>
+
+	<script>
+
+		// Get tickers
+		getTickers().then(tickers => {
+			const select = document.getElementById('tickers');
+
+			for (const key in tickers.Ticker) {
+
+				const ticker = tickers.Ticker[key];
+				const option = document.createElement('option');
+
+				option.value = ticker;
+				option.textContent = ticker;
+
+				select.appendChild(option);
+			}
+		}).catch(error => {
+			console.error('Error fetching tickers:', error);
+		});
+
+		// Get data
+		const selectedTickers = ["AAPL", "MSFT", "GOOGL"];
+
+		getData(selectedTickers).then(data => {
+		    console.log(data);
+		}).catch(error => {
+		    console.error('Error fetching data:', error);
+		});
+
 	</script>
 </body>
 </html>
