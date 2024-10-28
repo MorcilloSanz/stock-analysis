@@ -1,60 +1,46 @@
-const URL = "http://localhost:5000/";
-const END_POINT = "stock/";
+const URL_BASE = "http://localhost:5000/";
 
+const END_POINT_TICKERS = "stock/tickers";
+const END_POINT_DATA = "stock/data";
 
-function transformData(data) {
+async function getTickers() {
 
-	const chartData = {};
+	const requestOptions = {
+		method: "GET",
+		redirect: "follow"
+	};
 
-	for (let key in data) {
-		const [symbol, priceType] = key.match(/'(\w+)'/g).map(k => k.replace(/'/g, ""));
-		
-		if (!chartData[symbol]) chartData[symbol] = {};
-		if (!chartData[symbol][priceType]) chartData[symbol][priceType] = { labels: [], data: [] };
-		
-		for (let timestamp in data[key]) {
-			const date = new Date(parseInt(timestamp));
-			chartData[symbol][priceType].labels.push(date.toISOString().split('T')[0]);
-			chartData[symbol][priceType].data.push(data[key][timestamp]);
+	fetch(URL_BASE + END_POINT_TICKERS, requestOptions)
+	.then((response) => {
+		if (!response.ok) {
+			throw new Error("Network response was not ok " + response.statusText);
 		}
-	}
-
-	return chartData;
-}
-
-function createChart(data) {
-
-	console.log(data)
-	let chartData = transformData(data);
-	console.log(chartData)
-	
-	new Chart(ctx, {
-		type: 'line',
-		data: chartData,
-		options: {
-			responsive: true,
-			plugins: {
-				legend: {
-					position: 'top',
-				},
-				title: {
-					display: true,
-					text: 'Chart.js Line Chart'
-				}
-			}
-		}
-	});
-}
-
-async function loadChart(ctx) {
-
-	fetch(URL + END_POINT, {
-		method: 'GET',
-		headers: {
-			'Content-Type': 'application/json'
-		},
+		return response.json();
 	})
-	.then(response => response.json())
-	.then(data => createChart(data))
-	.catch(error => console.error('Error:', error));
+	.then((result) => console.log(result))
+	.catch((error) => console.error(error));
+
+	return null;
+}
+
+async function getData(tickers) {
+
+	const requestOptions = {
+		method: "GET",
+		redirect: "follow"
+	};
+
+	const params = new URLSearchParams({ tickers: tickers.join(",") });
+	
+	fetch(`${URL_BASE}${END_POINT_DATA}?${params}`, requestOptions)
+	.then((response) => {
+		if (!response.ok) {
+			throw new Error("Network response was not ok " + response.statusText);
+		}
+		return response.json();
+	})
+	.then((result) => console.log(result))
+	.catch((error) => console.error(error));
+
+	return null;
 }

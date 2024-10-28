@@ -7,114 +7,19 @@
 
 	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-	<script src="{{ url_for('static', filename='js/http.js') }}"></script>
 	<script src="{{ url_for('static', filename='js/stock.js') }}"></script>
 
 	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
 
 </head>
 <body>
-
-	<!--div>
-		<canvas id="myChart"></canvas>
-	</div>
-	  
 	<script>
-		const ctx = document.getElementById('myChart');
-		loadChart(ctx);
-	</script-->
+		let tickers = getTickers();
+		console.log(tickers)
 
-	<div class="grid">
-		<div class="chart-container"><canvas id="chart1"></canvas></div>
-		<div class="chart-container"><canvas id="chart2"></canvas></div>
-		<div class="chart-container"><canvas id="chart3"></canvas></div>
-		<div class="chart-container"><canvas id="chart4"></canvas></div>
-		<div class="chart-container"><canvas id="chart5"></canvas></div>
-		<div class="chart-container"><canvas id="chart6"></canvas></div>
-	</div>
-	
-	<script>
-		const data = {
-			labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio'],
-			datasets: [
-				{
-					label: 'Adj close',
-					data: [12, 19, 3, 5, 2, 3],
-					backgroundColor: 'rgba(255, 99, 132, 0.2)',
-					borderColor: 'rgba(255, 99, 132, 1)',
-					borderWidth: 1
-				},
-				{
-					label: 'Close',
-					data: [5, 10, 15, 20, 25, 30],
-					backgroundColor: 'rgba(54, 162, 235, 0.2)',
-					borderColor: 'rgba(54, 162, 235, 1)',
-					borderWidth: 1
-				},
-				{
-					label: 'High',
-					data: [20, 10, 15, 25, 5, 3],
-					backgroundColor: 'rgba(75, 192, 192, 0.2)',
-					borderColor: 'rgba(75, 192, 192, 1)',
-					borderWidth: 1
-				},
-				{
-					label: 'Low',
-					data: [8, 12, 18, 6, 7, 10],
-					backgroundColor: 'rgba(255, 206, 86, 0.2)',
-					borderColor: 'rgba(255, 206, 86, 1)',
-					borderWidth: 1
-				},
-				{
-					label: 'Open',
-					data: [15, 22, 10, 14, 16, 18],
-					backgroundColor: 'rgba(153, 102, 255, 0.2)',
-					borderColor: 'rgba(153, 102, 255, 1)',
-					borderWidth: 1
-				},
-				{
-					label: 'Volume',
-					data: [5, 15, 8, 20, 22, 19],
-					backgroundColor: 'rgba(255, 159, 64, 0.2)',
-					borderColor: 'rgba(255, 159, 64, 1)',
-					borderWidth: 1
-				}
-			]
-		};
-	
-		for (let i = 1; i <= 6; i++) {
-			const ctx = document.getElementById(`chart${i}`).getContext('2d');
-			new Chart(ctx, {
-				type: 'line', // Puedes cambiar el tipo de gráfica aquí
-				data: {
-					labels: data.labels,
-					datasets: [{
-						...data.datasets[i - 1], // Tomar cada dataset para cada gráfica
-						...data.datasets[i - 1]
-					}]
-				},
-				options: {
-					responsive: true,
-					scales: {
-						y: {
-							beginAtZero: true
-						}
-					}
-				}
-			});
-		}
+		const selected_tickers = ["AAPL", "MSFT", "GOOGL"];
+		let data = getData(selected_tickers)
+		console.log(data);
 	</script>
-
-
-
-	<div>
-		<canvas id="myChart"></canvas>
-	</div>
-	  
-	<script>
-		const ctx = document.getElementById('myChart');
-		loadChart(ctx);
-	</script>
-	   
 </body>
 </html>
