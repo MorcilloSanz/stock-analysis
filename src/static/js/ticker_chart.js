@@ -18,6 +18,7 @@ function chart(j, dates, tickerDatasets) {
         options: {
             responsive: true,
             maintainAspectRatio: false, 
+            radius: 0,
             plugins: {
                 legend: {
                     position: 'top',
