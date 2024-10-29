@@ -19,7 +19,17 @@
 	<header></header>
 	<nav></nav>
 
-	<select id="tickers" multiple></select>
+	<div class="container">
+
+		<h1>Selecciona los tickers</h1>
+
+        <div class="controls">
+            <select id="tickers" multiple></select>
+            <button id="add-btn">Add</button>
+            <select id="fav-tickers" multiple></select>
+            <button id="run-btn">Run</button>
+        </div>
+    </div>
 
 	<div class="grid">
 		<div class="chart-container"><canvas id="chart0"></canvas></div>
@@ -42,7 +52,7 @@
 
 				const option = document.createElement('option');
 				option.value = ticker;
-				option.textContent = name;
+				option.textContent = name + ' (' + ticker + ')';
 
 				select.appendChild(option);
 			}
@@ -50,16 +60,51 @@
 			console.error('Error fetching tickers:', error);
 		});
 
-		// Obtain from the select
-		const selectedTickers = ["AAPL", "MSFT", "GOOGL"];
-		
-		// Get data request
-		getData(selectedTickers).then(data => {
-		    console.log(data);
-			generateChart(data, selectedTickers);
-		}).catch(error => {
-		    console.error('Error fetching data:', error);
+		// Add tickers to favs button
+		document.getElementById('add-btn').addEventListener('click', function() {
+
+			const tickersSelect = document.getElementById('tickers');
+			const favTickersSelect = document.getElementById('fav-tickers');
+
+			Array.from(tickersSelect.selectedOptions).forEach(option => {
+				const exists = Array.from(favTickersSelect.options).some(favOption => favOption.value === option.value);
+				
+				if (!exists) {
+					const newOption = document.createElement('option');
+					newOption.value = option.value;
+					newOption.text = option.value;
+					favTickersSelect.add(newOption);
+				}
+			});
 		});
+
+		function getFavTickers() {
+			const favTickersSelect = document.getElementById('fav-tickers');
+			const favTickersArray = [];
+
+			Array.from(favTickersSelect.options).forEach(option => {
+				favTickersArray.push(option.value);
+			});
+
+			return favTickersArray;
+		}
+
+		// Run button
+		document.getElementById('run-btn').addEventListener('click', function() {
+
+			let favTickers = getFavTickers();
+
+			// Get data request
+			getData(favTickers).then(data => {
+				console.log(data);
+				generateChart(data, favTickers);
+			}).catch(error => {
+				console.error('Error fetching data:', error);
+			});
+
+			document.querySelector('.container').style.display = 'none';
+		});
+
 	</script>
 </body>
 </html>

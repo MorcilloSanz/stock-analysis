@@ -28,20 +28,20 @@ function chart(j, dates, tickerDatasets) {
             },
             scales: {
                 x: {
-                    type: 'time', // Usar escala de tiempo
+                    type: 'time',
                     time: {
-                        unit: 'day' // Mostrar por días
+                        unit: 'day' // Mostrar por dia
                     },
                     title: {
                         display: true,
-                        text: 'Fecha' // Título del eje X
+                        text: 'Fecha'
                     }
                 },
                 y: {
-                    beginAtZero: true, // Iniciar el eje Y en 0
+                    beginAtZero: true,
                     title: {
                         display: true,
-                        text: 'Precio' // Título del eje Y
+                        text: 'Precio'
                     }
                 }
             }
