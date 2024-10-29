@@ -23,7 +23,7 @@
 	<!-- Fixed navbar -->
 		<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
 			<div class="container-fluid">
-				<a class="navbar-brand" href="#">stock-analysis &#128201;</a>
+				<a class="navbar-brand" href="/">STOCK ANALYSIS &#128201;</a>
 				<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
 					<span class="navbar-toggler-icon"></span>
 				</button>
@@ -39,6 +39,24 @@
 							<a class="nav-link disabled" aria-disabled="true">Morcillo Sanz</a>
 						</li>
 					</ul>
+
+					<form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
+						<input type="search" class="form-control" placeholder="Search..." aria-label="Search">
+					</form>
+			
+					<div class="flex-shrink-0 dropdown">
+						<a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+							<img src="https://github.com/MorcilloSanz.png" alt="mdo" width="32" height="32" class="rounded-circle">
+						</a>
+						<ul class="dropdown-menu text-small shadow">
+							<li><a class="dropdown-item" href="#">New project...</a></li>
+							<li><a class="dropdown-item" href="#">Settings</a></li>
+							<li><a class="dropdown-item" href="#">Profile</a></li>
+							<li><hr class="dropdown-divider"></li>
+							<li><a class="dropdown-item" href="#">Sign out</a></li>
+						</ul>
+					</div>
+
 				</div>
 			</div>
 		</nav>
@@ -47,14 +65,20 @@
 	<main class="flex-shrink-0">
 
 		<div id="tickers-container" class="container">
-			<h1 class="display-4">Selecciona los tickers &#128182;</h1>
-			<select id="tickers" class="form-select" multiple></select>
-			<button id="add-btn" type="button" class="btn btn-primary">Add</button>
-			<select id="fav-tickers" class="form-select" multiple></select>
-			<button id="run-btn" type="button" class="btn btn-primary">Run</button>
+			<h1 class="display-4 mb-4">Select your favourite tickers &#128182;</h1>
+			<select id="tickers" class="form-select mb-4" multiple></select>
+			<div class="d-flex align-items-center mb-4">
+				<button id="add-btn" type="button" class="btn btn-primary me-2">Add</button>
+				<input id="input-ticker" class="form-control" type="text" placeholder="Add ticker manually">
+			</div>
+			<select id="fav-tickers" class="form-select mb-4" multiple></select>
+			<div>
+				<button id="remove-btn" type="button" class="btn btn-danger mb-4">Remove</button>
+				<button id="run-btn" type="button" class="btn btn-success mb-4">Run</button>
+			</div>
 		</div>
 	
-		<div class="container">
+		<div id="charts-container" class="container-fluid">
 			<div class="row">
 				<div class="col"><canvas id="chart0"></canvas></div>
 				<div class="col"><canvas id="chart1"></canvas></div>
@@ -72,7 +96,7 @@
 
 	<footer class="footer mt-auto py-3 bg-body-tertiary">
 		<div class="container">
-			<span class="text-body-secondary">Place sticky footer content here.</span>
+			<span class="text-body-secondary">version alpha 1.0</span>
 		</div>
 	</footer>
 
@@ -102,16 +126,34 @@
 			const tickersSelect = document.getElementById('tickers');
 			const favTickersSelect = document.getElementById('fav-tickers');
 
-			Array.from(tickersSelect.selectedOptions).forEach(option => {
-				const exists = Array.from(favTickersSelect.options).some(favOption => favOption.value === option.value);
-				
-				if (!exists) {
+			// Manual
+			const inputText = document.getElementById('input-ticker').value;
+			if(inputText.length > 0) {
+				const exists = Array.from(favTickersSelect.options).some(favOption => favOption.value === inputText);
+
+				if(!exists) {
 					const newOption = document.createElement('option');
-					newOption.value = option.value;
-					newOption.text = option.value;
+					newOption.value = inputText;
+					newOption.text = inputText;
 					favTickersSelect.add(newOption);
 				}
-			});
+
+				inputText = document.getElementById('input-ticker').value = "";
+			}
+
+			// From select
+			else {
+				Array.from(tickersSelect.selectedOptions).forEach(option => {
+					const exists = Array.from(favTickersSelect.options).some(favOption => favOption.value === option.value);
+					
+					if (!exists) {
+						const newOption = document.createElement('option');
+						newOption.value = option.value;
+						newOption.text = option.value;
+						favTickersSelect.add(newOption);
+					}
+				});
+			}
 		});
 
 		function getFavTickers() {
@@ -124,6 +166,14 @@
 
 			return favTickersArray;
 		}
+
+		// Remove button
+		document.getElementById('remove-btn').addEventListener('click', function() {
+			const favTickersSelect = document.getElementById('fav-tickers');
+			Array.from(favTickersSelect.selectedOptions).forEach(option => {
+				option.remove();
+			});
+		});
 
 		// Run button
 		document.getElementById('run-btn').addEventListener('click', function() {

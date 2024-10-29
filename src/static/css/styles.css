@@ -2,9 +2,62 @@ canvas {
 	height: 300px;
 }
 
-main > .container {
-	padding: 60px 15px 0;
+main > #charts-container {
+	padding: 70px 15px 0;
 }
+
+main > #tickers-container {
+	padding: 150px 15px 0;
+}
+
+#tickers-container .form-select {
+	height: 200px;
+}
+
+#tickers, #fav-tickers {
+	margin: 0px;
+}
+
+#tickers option, #fav-tickers option {
+	font-size: 1.0rem;
+	padding: 10px;
+	margin: 0px;
+	color: #4A4A4A;
+	border-bottom: 1px solid #E0E0E0;
+}
+
+#tickers option:hover, #fav-tickers option:hover {
+	background-color: #E0E0E0;
+	color: #333333;
+	font-weight: bold;
+	cursor: pointer;
+}
+
+form[role="search"] {
+	background-color: #333333;
+	border-radius: 8px;
+	padding: 4px;
+}
+
+form[role="search"] .form-control {
+	background-color: #1A1A1A;
+	color: #FFFFFF;
+	border: 0px;
+}
+
+form[role="search"] .form-control::placeholder {
+	color: #AAAAAA;
+	opacity: 1;
+}
+
+form[role="search"] .form-control:focus {
+	background-color: #1A1A1A;
+	color: #FFFFFF;
+	border-color: #777777;
+	box-shadow: 0 0 0 0.1rem rgba(255, 255, 255, 0.2);
+}
+
+/* Bootstrap */
 
 .bd-placeholder-img {
 	font-size: 1.125rem;

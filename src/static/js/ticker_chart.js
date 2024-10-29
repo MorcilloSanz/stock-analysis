@@ -33,18 +33,10 @@ function chart(j, dates, tickerDatasets) {
                     type: 'time',
                     time: {
                         unit: 'day' // Mostrar por dia
-                    },
-                    title: {
-                        display: true,
-                        text: 'Fecha'
                     }
                 },
                 y: {
                     beginAtZero: true,
-                    title: {
-                        display: true,
-                        text: 'Precio'
-                    }
                 }
             }
         }
