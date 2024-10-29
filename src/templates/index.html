@@ -8,6 +8,7 @@
 	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 	<script src="{{ url_for('static', filename='js/stock.js') }}"></script>
+	<script src="{{ url_for('static', filename='js/ticker_chart.js') }}"></script>
 
 	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
 
@@ -29,8 +30,7 @@
 	</div>
 
 	<script>
-
-		// Get tickers
+		// Get tickers request
 		getTickers().then(tickers => {
 			const select = document.getElementById('tickers');
 
@@ -49,68 +49,16 @@
 			console.error('Error fetching tickers:', error);
 		});
 
-		// Get data
+		// Obtain from the select
 		const selectedTickers = ["AAPL", "MSFT", "GOOGL"];
-		const vars = ["Open", "High", "Low", "Close", "Adj Close", "Volume"];
-
+		
+		// Get data request
 		getData(selectedTickers).then(data => {
 		    console.log(data);
-
-			dates = []
-			for(let j = 0; j < vars.length; j ++) {
-
-				let v = vars[j];
-
-				prices = []
-				for(let i = 0; i < selectedTickers.length; i ++) {
-
-					price = [];
-
-					let ticker = selectedTickers[i];
-					let pair = "('" + ticker + "', '" + v + "')";
-
-					for(const key in data[pair]) {
-						if(j == 0) dates.push(key);
-						price.push(data[pair][key]);
-					}
-
-					prices.push(price)
-				}
-
-				tickerDatasets = []
-				for(let i = 0; i < selectedTickers.length; i ++) {
-					tickerDatasets.push({
-						label: selectedTickers[i],
-						data: prices[i],
-						borderWidth: 1
-					});
-				}
-
-				new Chart(document.getElementById('chart' + j), {
-					type: 'line',
-					data: {
-						labels: dates,
-						datasets: tickerDatasets
-					},
-					options: {
-						responsive: true,
-						plugins: {
-							legend: {
-								position: 'top',
-							},
-							title: {
-								display: true,
-								text: v
-							}
-						}
-					}
-				});
-			}
-
+			generateChart(data, selectedTickers);
 		}).catch(error => {
 		    console.error('Error fetching data:', error);
 		});
-
 	</script>
 </body>
 </html>
