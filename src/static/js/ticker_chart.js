@@ -9,7 +9,7 @@ const vars = ["Open", "High", "Low", "Close", "Adj Close", "Volume"];
  */
 function chart(j, dates, tickerDatasets) {
 
-    new Chart(document.getElementById('chart' + j), {
+    new Chart(document.getElementById('chart' + j).getContext('2d'), {
         type: 'line',
         data: {
             labels: dates,
@@ -24,6 +24,25 @@ function chart(j, dates, tickerDatasets) {
                 title: {
                     display: true,
                     text: vars[j]
+                }
+            },
+            scales: {
+                x: {
+                    type: 'time', // Usar escala de tiempo
+                    time: {
+                        unit: 'day' // Mostrar por días
+                    },
+                    title: {
+                        display: true,
+                        text: 'Fecha' // Título del eje X
+                    }
+                },
+                y: {
+                    beginAtZero: true, // Iniciar el eje Y en 0
+                    title: {
+                        display: true,
+                        text: 'Precio' // Título del eje Y
+                    }
                 }
             }
         }
