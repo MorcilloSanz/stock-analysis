@@ -82,7 +82,14 @@ function generateChart(data, selectedTickers) {
     }
 }
 
-
+/**
+ * Loads a table of stock entries and dynamically generates rows with ticker data.
+ * 
+ * @param {Object} data - The data object containing stock information for each ticker and variable.
+ *                        It is structured with pairs of ticker and variable names as keys, mapping to
+ *                        arrays of entries.
+ * @param {Array} selectedTickers - Array of ticker symbols selected for display in the table.
+ */
 function loadEntries(data, selectedTickers) {
 
     // Load table
@@ -106,7 +113,10 @@ function loadEntries(data, selectedTickers) {
             html += `<td>${lastEntry}</td>`
         }
 
-        html += "<tr>";
+        const today = new Date();
+        const formattedDate = today.toISOString().split('T')[0];
+
+        html += `<td>${formattedDate}</td><tr>`;
 	}
 
     tbody.innerHTML = html;
@@ -117,6 +127,10 @@ function loadEntries(data, selectedTickers) {
 
         document.getElementById(id).addEventListener('click', function() {
             alert(id);
+
+            // http request to linear regression of Close, plot and compute derivative -> tendency.
+            // Insert candlestick chart with close and tendency datasets.
+            // Compute close and volume derivatives with respect to time.
         });
     }
 }
