@@ -67,7 +67,7 @@
 	<main class="flex-shrink-0">
 
 		<div id="tickers-container" class="container">
-			<h1 class="display-4 mb-4">Select your favourite tickers &#128182;</h1>
+			<h1 class="display-5 mb-4">Select your favourite tickers &#128182;</h1>
 			<select id="tickers" class="form-select mb-4" multiple></select>
 			<div class="d-flex align-items-center mb-4">
 				<button id="add-btn" type="button" class="btn btn-primary me-2">Add</button>
@@ -84,6 +84,9 @@
 		</div>
 	
 		<div id="analytics-container">
+
+			<h1 id="charts-title" class="display-6">Tickers data &#128640;</h1>
+
 			<!-- Charts -->
 			<div id="charts-container" class="container-fluid">
 				<div class="row">
@@ -102,7 +105,6 @@
 
 			<!-- Analytics -->
 			<div id="table-container" class="container-fluid">
-				
 				<table class="table">
 					<thead>
 					  <tr>
@@ -118,17 +120,10 @@
 					</thead>
 					<tbody id="stock-entries"></tbody>
 				  </table>
-
 			</div>
 			
 		</div>
 	</main>
-
-	<footer class="footer mt-auto py-3 bg-body-tertiary">
-		<div class="container">
-			<span class="text-body-secondary">version alpha 1.0</span>
-		</div>
-	</footer>
 
 	<script>
 		// Get tickers request

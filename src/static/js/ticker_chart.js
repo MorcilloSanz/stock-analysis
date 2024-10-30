@@ -21,7 +21,7 @@ function chart(j, dates, tickerDatasets) {
             radius: 0,
             plugins: {
                 legend: {
-                    position: 'top',
+                    position: 'bottom',
                 },
                 title: {
                     display: true,
@@ -85,18 +85,20 @@ function generateChart(data, selectedTickers) {
 
 function loadEntries(data, selectedTickers) {
 
+    // Load table
 	let tbody = document.getElementById("stock-entries");
 	let html = "";
 
 	for(let i = 0; i < selectedTickers.length; i ++) {
 
-        html += `<tr><th scope='row'>${i}</th><td>${selectedTickers[i]}</td>`;
+        let button = `<button id='button-${selectedTickers[i]}' type='button' class='btn btn-link'>${selectedTickers[i]}</button>`;
+        html += `<tr><th scope='row'>${i + 1}</th><td>${button}</td>`;
 
 		let ticker = selectedTickers[i];
         for(let j = 0; j < vars.length; j ++) {
 
             let pair = "('" + ticker + "', '" + vars[j] + "')";
-            
+
             let lastEntry = null;
             for(const key in data[pair])
                 lastEntry = data[pair][key];
@@ -108,4 +110,13 @@ function loadEntries(data, selectedTickers) {
 	}
 
     tbody.innerHTML = html;
+
+    // Buttons events
+    for(let i = 0; i < selectedTickers.length; i ++) {
+        let id = `button-${selectedTickers[i]}`;
+
+        document.getElementById(id).addEventListener('click', function() {
+            alert(id);
+        });
+    }
 }
