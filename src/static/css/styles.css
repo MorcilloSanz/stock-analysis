@@ -2,8 +2,9 @@ canvas {
 	height: 300px;
 }
 
-main > #charts-container {
+main > #analytics-container {
 	padding: 70px 15px 0;
+	visibility: hidden;
 }
 
 main > #tickers-container {
@@ -12,6 +13,7 @@ main > #tickers-container {
 
 #tickers-container .form-select {
 	height: 200px;
+	border: 1px solid rgb(170, 170, 255);
 }
 
 #tickers, #fav-tickers {
@@ -55,6 +57,14 @@ form[role="search"] .form-control:focus {
 	color: #FFFFFF;
 	border-color: #777777;
 	box-shadow: 0 0 0 0.1rem rgba(255, 255, 255, 0.2);
+}
+
+#spinner-animation {
+	visibility: hidden;
+}
+
+#table-container {
+	padding: 50px 15px 0;
 }
 
 /* Bootstrap */
