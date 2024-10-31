@@ -142,18 +142,13 @@
 				<div class="row">
 
 					<div class="col">
-						\[
-						\int_0^{\infty} e^{-x^2} \, dx = \frac{\sqrt{\pi}}{2}
-						\]
-					</div>
-
-					<div class="col">
 						<table class="table">
 							<thead>
 								<tr class="table-dark">
 									<th>Price</th>
 									<th>Volume</th>
 									<th>Interpretation</th>
+									<th>Action</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -161,34 +156,46 @@
 									<td>Increases</td>
 									<td>Increases</td>
 									<td>Strong trend</td>
+									<td><strong class="text-success">Consider buying</strong></td>
 								</tr>
 								<tr id="decision2">
 									<td>Increases</td>
 									<td>Decreases</td>
 									<td>Weak trend</td>
+									<td><strong class="text-warning">Caution;</strong> consider selling</td>
 								</tr>
 								<tr id="decision3">
 									<td>Decreases</td>
 									<td>Increases</td>
 									<td>Strong downward trend</td>
+									<td><strong class="text-danger">Consider selling</strong></td>
 								</tr>
 								<tr id="decision4">
 									<td>Decreases</td>
 									<td>Decreases</td>
 									<td>Weak downward trend</td>
+									<td><strong class="text-warning">Caution;</strong> hold position</td>
 								</tr>
 								<tr id="decision5">
 									<td>Remains the same</td>
 									<td>Increases</td>
 									<td>Potential accumulation/distribution</td>
+									<td><strong class="text-success">Consider buying</strong></td>
 								</tr>
 								<tr id="decision6">
 									<td>Remains the same</td>
 									<td>Decreases</td>
 									<td>Weak trend</td>
+									<td><strong class="text-warning">Caution;</strong> consider selling</td>
 								</tr>
 							</tbody>
 						</table>						
+					</div>
+
+					<div class="col">
+						\[
+						\int_0^{\infty} e^{-x^2} \, dx = \frac{\sqrt{\pi}}{2}
+						\]
 					</div>
 
 				</div>
