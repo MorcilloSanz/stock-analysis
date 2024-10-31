@@ -21,7 +21,7 @@ function chart(j, dates, tickerDatasets) {
             radius: 0,
             plugins: {
                 legend: {
-                    position: 'bottom',
+                    position: 'top',
                 },
                 title: {
                     display: true,
