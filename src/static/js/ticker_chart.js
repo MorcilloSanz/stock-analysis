@@ -194,10 +194,10 @@ function loadEntries(data, selectedTickers) {
             
             chart('Volume', dates, volumeDatasets, "Volume Analysis");
 
-            // Close Derivative (tendency) chart
+            // Close Derivative (trend) chart
             let closeDerivativeDatasets = [];
             closeDerivativeDatasets.push({
-                label: "Close (smooth) time derivative = tendency",
+                label: "Close (smooth) time derivative = trend",
                 data: closeTimeDerivative,
                 borderWidth: 1
             });
@@ -213,6 +213,14 @@ function loadEntries(data, selectedTickers) {
             });
             
             chart('DerivativeVolume', dates, volumeDerivativeDatasets);
+
+            // Decision tree
+            let decision = solveDecisionTree(
+                closeTimeDerivative[closeTimeDerivative.length - 1], 
+                volumeTimeDerivative[volumeTimeDerivative.length - 1]
+            );
+
+            document.getElementById(`decision${decision}`).classList.add('table-primary');
         });
     }
 }

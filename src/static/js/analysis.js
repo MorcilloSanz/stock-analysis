@@ -37,3 +37,17 @@ function lowpass(data, windowSize) {
 
     return movingAverage;
 }
+
+function solveDecisionTree(closeVariation, volumeVariation) {
+
+	if(closeVariation > 0) {
+		if(volumeVariation > 0) return 1;
+		else return 2;
+	}else if(closeVariation < 0) {
+		if(volumeVariation > 0) return 3;
+		else return 4;
+	}else {
+		if(volumeVariation > 0) return 5;
+		else return 6;
+	}
+}
