@@ -5,15 +5,15 @@ const vars = ["Open", "High", "Low", "Close", "Adj Close", "Volume"];
  * 
  * @param {number} j - The index to identify the chart (used for element ID and chart title).
  * @param {Array} dates - An array of dates representing the x-axis labels for the chart.
- * @param {Array} tickerDatasets - An array of dataset objects, where each dataset contains data points and a label for a specific ticker.
+ * @param {Array} _datasets - An array of dataset objects, where each dataset contains data points and a label for a specific ticker.
  */
-function chart(j, dates, tickerDatasets) {
+function chart(j, dates, _datasets, titleText="") {
 
     new Chart(document.getElementById('chart' + j).getContext('2d'), {
         type: 'line',
         data: {
             labels: dates,
-            datasets: tickerDatasets
+            datasets: _datasets
         },
         options: {
             responsive: true,
@@ -25,7 +25,7 @@ function chart(j, dates, tickerDatasets) {
                 },
                 title: {
                     display: true,
-                    text: vars[j]
+                    text: titleText.length == 0 ? vars[j] : titleText
                 }
             },
             scales: {
@@ -36,7 +36,7 @@ function chart(j, dates, tickerDatasets) {
                     }
                 },
                 y: {
-                    beginAtZero: true,
+                    beginAtZero: false,
                 }
             }
         }
@@ -51,16 +51,16 @@ function chart(j, dates, tickerDatasets) {
  */
 function generateChart(data, selectedTickers) {
 
-    dates = [];
+    let dates = [];
     for(let j = 0; j < vars.length; j ++) {
 
-        prices = [];
+        let prices = [];
         for(let i = 0; i < selectedTickers.length; i ++) {
 
             let ticker = selectedTickers[i];
-            let pair = "('" + ticker + "', '" + vars[j] + "')";
+            let pair = `('${ticker}', '${vars[j]}')`;
 
-            price = [];
+            let price = [];
             for(const key in data[pair]) {
                 if(j == 0) dates.push(key);
                 price.push(data[pair][key]);
@@ -69,7 +69,7 @@ function generateChart(data, selectedTickers) {
             prices.push(price);
         }
 
-        tickerDatasets = [];
+        let tickerDatasets = [];
         for(let i = 0; i < selectedTickers.length; i ++) {
             tickerDatasets.push({
                 label: selectedTickers[i],
@@ -80,6 +80,27 @@ function generateChart(data, selectedTickers) {
 
         chart(j, dates, tickerDatasets);
     }
+}
+
+function getCloseVolume(data, ticker) {
+
+    let pairClose = `('${ticker}', 'Close')`;
+    let pairVolume = `('${ticker}', 'Volume')`;
+
+    let dates = [];
+    let closeData = [];
+    let volumeData = [];
+
+    for(const key in data[pairClose]) {
+        dates.push(key);
+        closeData.push(data[pairClose][key]);
+    }
+
+    for(const key in data[pairVolume]) {
+        volumeData.push(data[pairVolume][key]);
+    }
+
+    return [dates, closeData, volumeData];
 }
 
 /**
@@ -126,9 +147,51 @@ function loadEntries(data, selectedTickers) {
         let id = `button-${selectedTickers[i]}`;
 
         document.getElementById(id).addEventListener('click', function() {
-            alert(id);
 
+            let analysisData = getCloseVolume(data, selectedTickers[i]);
+
+            let dates = analysisData[0];
+            let closeData = analysisData[1];
+            let volumeData = analysisData[2];
+
+            let windowSize = 10;
+            let closeDataSmooth = lowpass(closeData, windowSize);
+            let volumeDataSmooth = lowpass(volumeData, windowSize);
+
+            console.log("Close: " + closeData);
+            console.log("Volume: " + volumeData);
+            console.log("Close smooth: " + closeDataSmooth);
+            console.log("Volume smooth: " + volumeDataSmooth);
+
+            // Close chart
+            let closeDatasets = [];
+            closeDatasets.push({
+                label: "Close",
+                data: closeData,
+                borderWidth: 1
+            });
+            closeDatasets.push({
+                label: "Close smooth",
+                data: closeDataSmooth,
+                borderWidth: 1
+            });
             
+            chart('Close', dates, closeDatasets, "Close Analysis");
+
+            // Volume chart
+            let volumeDatasets = [];
+            volumeDatasets.push({
+                label: "Volume",
+                data: volumeData,
+                borderWidth: 1
+            });
+            volumeDatasets.push({
+                label: "Volume smooth",
+                data: volumeDataSmooth,
+                borderWidth: 1
+            });
+            
+            chart('Volume', dates, volumeDatasets, "Volume Analysis");
         });
     }
 }
