@@ -158,10 +158,8 @@ function loadEntries(data, selectedTickers) {
             let closeDataSmooth = lowpass(closeData, windowSize);
             let volumeDataSmooth = lowpass(volumeData, windowSize);
 
-            console.log("Close: " + closeData);
-            console.log("Volume: " + volumeData);
-            console.log("Close smooth: " + closeDataSmooth);
-            console.log("Volume smooth: " + volumeDataSmooth);
+            let closeTimeDerivative = timeDerivative(closeDataSmooth);
+            let volumeTimeDerivative = timeDerivative(volumeDataSmooth);
 
             // Close chart
             let closeDatasets = [];

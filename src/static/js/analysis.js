@@ -27,12 +27,13 @@ function timeDerivative(fun) {
 function lowpass(data, windowSize) {
 
 	let movingAverage = [];
+    
+    for (let i = 0; i < data.length; i++) {
+        let start = Math.max(0, i - windowSize + 1);
+        let window = data.slice(start, i + 1);
+        let sum = window.reduce((acc, val) => acc + val, 0);
+        movingAverage.push(sum / window.length);
+    }
 
-	for (let i = 0; i <= data.length - windowSize; i++) {
-		let window = data.slice(i, i + windowSize);
-		let sum = window.reduce((acc, val) => acc + val, 0);
-		movingAverage.push(sum / windowSize);
-	}
-
-	return movingAverage;
+    return movingAverage;
 }
