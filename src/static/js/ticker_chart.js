@@ -128,9 +128,7 @@ function loadEntries(data, selectedTickers) {
         document.getElementById(id).addEventListener('click', function() {
             alert(id);
 
-            // http request to linear regression of Close, plot and compute derivative -> tendency.
-            // Insert candlestick chart with close and tendency datasets.
-            // Compute close and volume derivatives with respect to time.
+            
         });
     }
 }

@@ -105,7 +105,7 @@
 			<div id="table-container" class="container-fluid">
 				<table class="table">
 					<thead>
-					  <tr>
+					  <tr class="table-dark">
 						<th scope="col">#</th>
 						<th scope="col">Ticker</th>
 						<th scope="col">Open</th>
@@ -119,6 +119,13 @@
 					</thead>
 					<tbody id="stock-entries"></tbody>
 				  </table>
+			</div>
+
+			<div id="close-volume-analysis-container" class="container-fluid">
+				<div class="row">
+					<div class="col"><canvas id="chart-close"></canvas></div>
+					<div class="col"><canvas id="chart-volume"></canvas></div>
+				</div>
 			</div>
 			
 		</div>
