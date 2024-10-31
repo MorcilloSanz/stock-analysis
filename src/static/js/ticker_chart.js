@@ -190,6 +190,26 @@ function loadEntries(data, selectedTickers) {
             });
             
             chart('Volume', dates, volumeDatasets, "Volume Analysis");
+
+            // Close Derivative (tendency) chart
+            let closeDerivativeDatasets = [];
+            closeDerivativeDatasets.push({
+                label: "Close time derivative",
+                data: closeTimeDerivative,
+                borderWidth: 1
+            });
+            
+            chart('DerivativeClose', dates, closeDerivativeDatasets, "Tendency along the time");
+
+            // Volume Derivative chart
+            let volumeDerivativeDatasets = [];
+            volumeDerivativeDatasets.push({
+                label: "Volume time derivative",
+                data: volumeTimeDerivative,
+                borderWidth: 1
+            });
+            
+            chart('DerivativeVolume', dates, volumeDerivativeDatasets, "Volume variation with respect to time");
         });
     }
 }
