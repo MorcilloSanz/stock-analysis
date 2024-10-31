@@ -100,6 +100,11 @@
 				</div>
 			</div>
 
+			<div id="section-title" class="container-fluid">
+				<h1>Close-Volume Analysis</h1>
+				<p>click a ticker to study the close and volume analysis</p>
+			</div>
+
 			<!-- Analytics -->
 			<div id="table-container" class="container-fluid">
 				<table class="table">
@@ -128,6 +133,55 @@
 				<div class="row">
 					<div class="col"><canvas id="chartDerivativeClose"></canvas></div>
 					<div class="col"><canvas id="chartDerivativeVolume"></canvas></div>
+				</div>
+			</div>
+
+			<div id="decision-container" class="container-fluid">
+				<div class="row">
+					<div class="col"></div>
+						<div class="col">
+							<table class="table">
+								<thead>
+									<tr class="table-dark">
+										<th>Price</th>
+										<th>Volume</th>
+										<th>Interpretation</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>Increases</td>
+										<td>Increases</td>
+										<td>Strong trend</td>
+									</tr>
+									<tr>
+										<td>Increases</td>
+										<td>Decreases</td>
+										<td>Weak trend</td>
+									</tr>
+									<tr>
+										<td>Decreases</td>
+										<td>Increases</td>
+										<td>Strong downward trend</td>
+									</tr>
+									<tr>
+										<td>Decreases</td>
+										<td>Decreases</td>
+										<td>Weak downward trend</td>
+									</tr>
+									<tr>
+										<td>Remains the same</td>
+										<td>Increases</td>
+										<td>Potential accumulation/distribution</td>
+									</tr>
+									<tr>
+										<td>Remains the same</td>
+										<td>Decreases</td>
+										<td>Weak trend</td>
+									</tr>
+								</tbody>
+							</table>						
+						</div>
 				</div>
 			</div>
 			

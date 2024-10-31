@@ -148,6 +148,9 @@ function loadEntries(data, selectedTickers) {
 
         document.getElementById(id).addEventListener('click', function() {
 
+            document.getElementById('close-volume-analysis-container').style.visibility = 'visible';
+            document.getElementById('decision-container').style.visibility = 'visible';
+
             let analysisData = getCloseVolume(data, selectedTickers[i]);
 
             let dates = analysisData[0];
@@ -194,22 +197,22 @@ function loadEntries(data, selectedTickers) {
             // Close Derivative (tendency) chart
             let closeDerivativeDatasets = [];
             closeDerivativeDatasets.push({
-                label: "Close time derivative",
+                label: "Close (smooth) time derivative = tendency",
                 data: closeTimeDerivative,
                 borderWidth: 1
             });
             
-            chart('DerivativeClose', dates, closeDerivativeDatasets, "Tendency along the time");
+            chart('DerivativeClose', dates, closeDerivativeDatasets);
 
             // Volume Derivative chart
             let volumeDerivativeDatasets = [];
             volumeDerivativeDatasets.push({
-                label: "Volume time derivative",
+                label: "Volume (smooth) time derivative",
                 data: volumeTimeDerivative,
                 borderWidth: 1
             });
             
-            chart('DerivativeVolume', dates, volumeDerivativeDatasets, "Volume variation with respect to time");
+            chart('DerivativeVolume', dates, volumeDerivativeDatasets);
         });
     }
 }

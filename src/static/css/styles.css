@@ -7,6 +7,10 @@ canvas {
 	text-align: center;
 }
 
+#section-title {
+	padding: 50px 15px 0;
+}
+
 main > #analytics-container {
 	padding: 70px 15px 0;
 	visibility: hidden;
@@ -70,6 +74,15 @@ form[role="search"] .form-control:focus {
 #table-container {
 	padding: 50px 15px 0;
 	overflow: auto;
+}
+
+#close-volume-analysis-container {
+	visibility: hidden;
+}
+
+#decision-container {
+	visibility: hidden;
+	padding: 50px 15px 0;
 }
 
 /* Bootstrap */
