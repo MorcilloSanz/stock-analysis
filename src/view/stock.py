@@ -5,38 +5,7 @@ import yfinance as yf
 from flask import Blueprint, request, jsonify, make_response
 
 
-# Create a blueprint for the stock module
 stock = Blueprint('stock', __name__, url_prefix='/stock')
-
-
-def CORS(response):
-	"""
-    Adds Cross-Origin Resource Sharing (CORS) headers to the given response, allowing access 
-    from different origins.
-    
-    Parameters:
-        response (Response): The HTTP response object to which CORS headers will be added.
-
-    Modifies:
-        response.headers: Adds headers to allow any origin, GET, POST, OPTIONS methods, 
-                          and specific request headers (Content-Type, Authorization).
-    """
-	response.headers['Access-Control-Allow-Origin'] = '*'
-	response.headers['Access-Control-Allow-Methods'] = 'GET, POST, OPTIONS'
-	response.headers['Access-Control-Allow-Headers'] = 'Content-Type, Authorization'
-
-
-@stock.route('/tickers', methods=['OPTIONS'])
-def tickers_options():
-	"""
-	Handles OPTIONS requests for CORS preflight. Returns a response with CORS headers.
-
-	Returns:
-		Response: An empty HTTP response with CORS headers.
-	"""
-	response = make_response()
-	CORS(response)
-	return response
 
 
 @stock.route('/tickers', methods=('GET', 'POST'))
@@ -52,21 +21,6 @@ def tickers_data():
     """
 	df = pd.read_csv('tickers.csv', header=None, names=["Ticker", "Name"], encoding='latin1')
 	response = make_response(df.to_json())
-	CORS(response)
-
-	return response
-
-
-@stock.route('/data', methods=['OPTIONS'])
-def stock_options():
-	"""
-	Handles OPTIONS requests for CORS preflight. Returns a response with CORS headers.
-
-	Returns:
-		Response: An empty HTTP response with CORS headers.
-	"""
-	response = make_response()
-	CORS(response)
 	return response
 
 
@@ -81,6 +35,9 @@ def stock_data():
     Returns:
         Response: A JSON response containing the stock data for the specified companies, with
                   CORS headers added.
+
+	HTTP Headers:
+		Authorization: the token of the user.
 
 	Params:
 		?tickers=AAPL,MSFT,GOOGL
@@ -99,6 +56,4 @@ def stock_data():
 
 	# Return response
 	response = make_response(companies_data.to_json())
-	CORS(response)
-
 	return response	
