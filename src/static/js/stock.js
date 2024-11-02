@@ -1,8 +1,3 @@
-const URL_BASE = "http://localhost:5000/";
-
-const END_POINT_TICKERS = "stock/tickers";
-const END_POINT_DATA = "stock/data";
-
 /**
  * Fetches the tickers from the API.
  * 
@@ -37,8 +32,7 @@ async function getTickers() {
 		return result;
 
 	} catch (error) {
-		console.error("Fetch error:", error);
-		return null;
+		return error;
 	}
 }
 
@@ -80,7 +74,6 @@ async function getData(tickers) {
 		return result;
 
 	} catch (error) {
-		console.error("Fetch error:", error);
-		return null;
+		return error;
 	}
 }

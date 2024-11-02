@@ -4,6 +4,7 @@ from flask_cors import CORS
 from database.database import *
 
 from view.stock import stock
+from view.auth_view import auth
 
 
 app = Flask(__name__)
@@ -13,11 +14,22 @@ CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 
 app.register_blueprint(stock)
+app.register_blueprint(auth)
 
 
 @app.route('/')
+def index():
+    return render_template('login.html')
+
+
+@app.route('/home')
 def home():
-    return render_template('index.html')
+    return render_template('home.html')
+
+
+@app.route('/register')
+def register():
+    return render_template('register.html')
 
 
 def generate_database() -> None:

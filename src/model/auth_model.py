@@ -21,7 +21,7 @@ class AuthModel(DatabaseModel):
 			hash_code: the hash code of the user.
 			token: the token of the user.
 		"""
-		sql: str = f"INSERT INTO USER(USERNAME,EMAIL,PERMISSION,_HASH) VALUES('{username}','{email}','{hash_code}');"
+		sql: str = f"INSERT INTO USER(USERNAME,EMAIL,_HASH) VALUES('{username}','{email}','{hash_code}');"
 		self.database.cur.execute(sql)
 
 		sql = f"SELECT ID FROM USER WHERE EMAIL='{email}';"

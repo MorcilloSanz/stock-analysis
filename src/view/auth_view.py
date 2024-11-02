@@ -32,7 +32,7 @@ def login():
     
     response = {}
     
-    if user[0][1] == username and str(user[0][4]) == str(AuthController.sha256(password)):
+    if user[0][1] == username and str(user[0][3]) == str(AuthController.sha256(password)):
 
         auth_controller.open_connection()
         token = auth_controller.get_token(int(user[0][0]))
@@ -42,7 +42,6 @@ def login():
             'id' : user[0][0],
             'username' : username,
             'email' : user[0][2],
-            'permission' : user[0][3],
             'token' : token
         }
 
