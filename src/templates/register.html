@@ -63,11 +63,10 @@
 				let email = document.getElementById("register-email").value;
 				let password = document.getElementById("register-password").value;
 
-				console.log(username, email, password)
-
 				register(username, email, password).then(response => {
 					console.log(response);
-					//window.location.replace("{{ url_for('index') }}");
+					// Login
+					window.location.replace("{{ url_for('index') }}");
 				}).catch(error => {
 					console.error('Bad register:', error);
 					toast = true;

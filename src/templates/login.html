@@ -24,7 +24,6 @@
 	<!-- If already logged go to home page -->
 	<script>
 		let user = sessionStorage.getItem('user');
-		console.log(user)
 		if(user != 'null') {
 			window.location.replace("{{ url_for('home') }}");
 		}
