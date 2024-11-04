@@ -3,7 +3,7 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>stock-analysis</title>
+	<title>stock-analysis login</title>
 
 	<script src="{{ url_for('static', filename='js/endpoint.js') }}"></script>
 	<script src="{{ url_for('static', filename='js/auth.js') }}"></script>
@@ -25,9 +25,11 @@
 
 	<main class="flex-shrink-0">
 
-		<div id="login-container" class="container">
+		<div id="login-container" class="container d-flex flex-column align-items-center justify-content-center" style="min-height: 50vh;">
 
-			<h1 class="mb-3">Login&#128075;</h1>
+			<div class="text-center mb-3">
+				<img src="{{ url_for('static', filename='images/crow-logo.png') }}" width="256" height="256" alt="Logo">
+			</div>
 
 			<form>
 				<div class="mb-3">
@@ -35,19 +37,19 @@
 					<input type="text" class="form-control" id="login-username">
 				</div>
 				<div class="mb-3">
-				  <label for="login-password" class="form-label">Password</label>
-				  <input type="password" class="form-control" id="login-password">
+					<label for="login-password" class="form-label">Password</label>
+					<input type="password" class="form-control" id="login-password">
 				</div>
 				<div class="mb-3 form-check">
-				  <input type="checkbox" class="form-check-input" id="exampleCheck1">
-				  <label class="form-check-label" for="exampleCheck1">Check me out</label>
+					<input type="checkbox" class="form-check-input" id="exampleCheck1">
+					<label class="form-check-label" for="exampleCheck1">Check me out</label>
 				</div>
 				<div class="mb-3">
 					<button id="login-btn" type="button" class="btn btn-primary">Login</button>
 					<button id="register-btn" type="button" class="btn btn-link">Don't you have an account? Register here</button>
 				</div>
-			  </form>
-
+			</form>
+		
 			<div id="toast-div" class="container" style="visibility: hidden; text-align: center;">
 				<p class="text-danger"><strong>Bad login:</strong> check username or password</p>
 			</div>

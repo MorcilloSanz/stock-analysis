@@ -25,9 +25,11 @@
 
 	<main class="flex-shrink-0">
 
-		<div id="register-container" class="container">
-
-			<h1 class="mb-3">Register&#128079;</h1>
+		<div id="register-container" class="container d-flex flex-column align-items-center justify-content-center" style="min-height: 50vh;">
+			
+			<div class="text-center mb-3">
+				<img src="{{ url_for('static', filename='images/feather-logo.png') }}" width="256" height="256" alt="Logo">
+			</div>
 
 			<form>
 				<div class="mb-3">
