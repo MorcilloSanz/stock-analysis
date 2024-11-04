@@ -64,7 +64,6 @@
 
 				register(username, email, password).then(response => {
 					console.log(response);
-					// Login
 					window.location.replace("{{ url_for('index') }}");
 				}).catch(error => {
 					console.error('Bad register:', error);

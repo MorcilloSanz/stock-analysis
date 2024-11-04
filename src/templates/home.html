@@ -22,7 +22,7 @@
 
 	<!-- If not logged go to login page -->
 	<script>
-		let user = sessionStorage.getItem('user');
+		let user = JSON.parse(sessionStorage.getItem('user'));
 		if(user == null) {
 			window.location.replace("{{ url_for('index') }}");
 		}
@@ -48,7 +48,7 @@
 							<a class="nav-link" href="#">Link</a>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link disabled" aria-disabled="true">Morcillo Sanz</a>
+							<a id="name-link" class="nav-link disabled" aria-disabled="true"></a>
 						</li>
 					</ul>
 			
@@ -210,6 +210,9 @@
 	</main>
 
 	<script>
+		// Update name link
+		document.getElementById('name-link').text = user["username"];
+
 		// Get tickers request
 		getTickers().then(tickers => {
 			const select = document.getElementById('tickers');

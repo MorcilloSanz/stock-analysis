@@ -69,13 +69,13 @@ def register():
 
     auth_controller: AuthController = AuthController()
 
-    response = f'{username} registered successfully', 200
+    response = jsonify({'message': f'{username} registered successfully'}), 200
 
     auth_controller.open_connection()
     try:
         auth_controller.register_user(username, email, password)
     except:
-        response  = 'The user already exists', 400
+        response  = jsonify({'error': 'The user already exists'}), 400
     auth_controller.close_connection()
 
     return response

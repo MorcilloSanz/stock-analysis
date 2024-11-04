@@ -1,3 +1,13 @@
+/**
+ * Logs in a user by sending a POST request with username and password.
+ * 
+ * @async
+ * @function login
+ * @param {string} username - The username of the user.
+ * @param {string} password - The password of the user.
+ * @returns {Promise<Object>} The result of the login operation, parsed as JSON.
+ * @throws Will throw an error if the network response is not ok or if the login credentials are incorrect.
+ */
 async function login(username, password) {
 
 	const formdata = new FormData();
@@ -23,6 +33,17 @@ async function login(username, password) {
 	return result;
 }
 
+/**
+ * Registers a new user by sending a POST request with username, email, and password.
+ * 
+ * @async
+ * @function register
+ * @param {string} username - The username for the new user.
+ * @param {string} email - The email address for the new user.
+ * @param {string} password - The password for the new user.
+ * @returns {Promise<Object>} The result of the registration operation, parsed as JSON.
+ * @throws Will throw an error if the network response is not ok, if the user already exists, or if the authorization is unsuccessful.
+ */
 async function register(username, email, password) {
 
 	const formdata = new FormData();
