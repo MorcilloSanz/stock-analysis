@@ -18,8 +18,8 @@ def login():
     Returns:
         The user or bad login.
     """
-    username = request.args.get('username')
-    password = request.args.get('password')
+    username = request.form.get('username')
+    password = request.form.get('password')
 
     auth_controller: AuthController = AuthController()
 
@@ -63,9 +63,9 @@ def register():
     Returns:
         Ok or error if the user already exists.
     """
-    username = request.args.get('username')
-    email = request.args.get('email')
-    password = request.args.get('password')
+    username = request.form.get('username')
+    email = request.form.get('email')
+    password = request.form.get('password')
 
     auth_controller: AuthController = AuthController()
 

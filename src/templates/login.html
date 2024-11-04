@@ -14,20 +14,11 @@
 	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
 	
 	<style>
-
 		#login-container {
 			padding: 150px 15px 0;
 			width: 70%;
 		}
 	</style>
-
-	<!-- If already logged go to home page -->
-	<script>
-		let user = sessionStorage.getItem('user');
-		if(user != 'null') {
-			window.location.replace("{{ url_for('home') }}");
-		}
-	</script>
 
 </head>
 <body>
