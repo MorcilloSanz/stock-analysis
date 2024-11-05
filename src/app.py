@@ -3,7 +3,7 @@ from flask_cors import CORS
 
 from database.database import *
 
-from view.stock import stock
+from view.stock_view import stock
 from view.auth_view import auth
 
 
@@ -30,6 +30,11 @@ def home():
 @app.route('/register')
 def register():
     return render_template('register.html')
+
+
+@app.route('/analysis')
+def analysis():
+    return render_template('analysis.html')
 
 
 def generate_database() -> None:
