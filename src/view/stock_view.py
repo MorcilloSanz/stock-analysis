@@ -1,7 +1,6 @@
-from datetime import datetime, timedelta
+from controller.stock_controller import StockController
 
 import pandas as pd
-import yfinance as yf
 from flask import Blueprint, request, jsonify, make_response
 
 
@@ -42,17 +41,11 @@ def stock_data():
 	Params:
 		?tickers=AAPL,MSFT,GOOGL
     """
-	companies_tickers: str = request.args.get('tickers').split(',')
+	companies_tickers: str = request.args.get('tickers')
 
-	# Date range
-	end_date: datetime = datetime.today().strftime('%Y-%m-%d')
-	start_date: datetime = (datetime.today() - timedelta(days=365)).strftime('%Y-%m-%d')
-
-	# Download companies data 
-	companies_data = yf.download(companies_tickers, start=start_date, end=end_date, group_by='ticker')
-
-	companies_data.index = pd.to_datetime(companies_data.index)
-	companies_data.index = companies_data.index.strftime('%Y-%m-%d')
+	# Get companies data
+	stock_controller: StockController = StockController()
+	companies_data: pd.DataFrame = stock_controller.companies_data(companies_tickers, days=365)
 
 	# Return response
 	response = make_response(companies_data.to_json())
