@@ -94,3 +94,12 @@ class AuthModel(DatabaseModel):
 		self.database.cur.execute(sql)
 
 		return self.database.cur.fetchall()[0][0]
+	
+	
+	def get_user_id(self, token: str) -> any:
+
+		sql = f"SELECT USER_ID FROM TOKEN WHERE TOKEN='{token}';"
+		self.database.cur.execute(sql)
+		user_id: int = self.database.cur.fetchall()[0][0]
+
+		return user_id

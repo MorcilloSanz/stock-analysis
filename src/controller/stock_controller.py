@@ -17,9 +17,29 @@ class StockController(DatabaseController):
 	
 
 	def companies_data(self, tickers: str, days: int) -> pd.DataFrame:
+		"""
+		"""
 		companies_tickers: list[str] = tickers.split(",")
 
 		end_date: datetime = datetime.today().strftime('%Y-%m-%d')
 		start_date: datetime = (datetime.today() - timedelta(days=days)).strftime('%Y-%m-%d')
 
 		return self.model.companies_data(companies_tickers, start_date, end_date)
+
+
+	def add_stocks(self, ticker: str, count: float, token: str) -> None:
+		"""
+		"""
+		self.model.add_stocks(ticker, count, token)
+
+
+	def get_stocks(self, token: str) -> any:
+		"""
+		"""
+		return self.model.get_stocks(token)
+	
+
+	def update_stocks(self, ticker:str, count: float, token: str) -> None:
+		"""
+		"""
+		self.model.update_stocks(ticker, count, token)

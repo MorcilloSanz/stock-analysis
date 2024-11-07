@@ -49,4 +49,45 @@ def stock_data():
 
 	# Return response
 	response = make_response(companies_data.to_json())
-	return response	
+	return response
+
+
+@stock.route('/stocks', methods=('GET', 'POST'))
+def stocks():
+	"""
+	"""
+	token: str = request.headers.get('Authorization')
+
+	stock_controller: StockController = StockController()
+
+	stock_controller.open_connection()
+	try:
+		user_stocks = stock_controller.get_stocks(token)
+	except:
+		return jsonify({'error' : 'unauthorized'}, 401)
+	stock_controller.close_connection()
+
+	response = make_response(jsonify(user_stocks))
+	return response
+
+
+@stock.route('/add_stocks', methods=('GET', 'POST'))
+def add_stocks():
+	"""
+	"""
+	ticker: str = request.args.get('ticker')
+	count: str = request.args.get('count')
+	token: str = request.headers.get('Authorization')
+
+	stock_controller: StockController = StockController()
+
+	response = make_response(jsonify({'message' : 'stocks added'}))
+
+	stock_controller.open_connection()
+	try:
+		stock_controller.add_stocks(ticker, count, token)
+	except:
+		response = jsonify({'error': 'stocks already exists, pls update them'}), 400
+	stock_controller.close_connection()
+
+	return response
