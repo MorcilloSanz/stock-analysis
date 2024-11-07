@@ -77,3 +77,58 @@ async function getData(tickers) {
 		return error;
 	}
 }
+
+async function getStocks(token) {
+
+	const myHeaders = new Headers();
+	myHeaders.append("Authorization", token);
+
+	const requestOptions = {
+		method: "GET",
+		headers: myHeaders,
+		redirect: "follow"
+	};
+
+	try {
+		const response = await fetch(`${URL_BASE}${END_POINT_STOCKS}`, requestOptions);
+
+		if (!response.ok) {
+			throw new Error("Network response was not ok " + response.statusText);
+		}
+
+		const result = await response.json();
+		return result;
+	}catch (error) {
+		return error;
+	}
+}
+
+async function addStocks(ticker, count, token) {
+
+	const myHeaders = new Headers();
+	myHeaders.append("Authorization", token);
+
+	const params = new URLSearchParams({ 
+		ticker: ticker,
+		count: count
+	});
+
+	const requestOptions = {
+		method: "POST",
+		headers: myHeaders,
+		redirect: "follow"
+	};
+
+	try {
+		const response = await fetch(`${URL_BASE}${END_POINT_ADD_STOCKS}?${params}`, requestOptions);
+
+		if (!response.ok) {
+			throw new Error("Network response was not ok " + response.statusText);
+		}
+
+		const result = await response.json();
+		return result;
+	}catch (error) {
+		return error;
+	}
+}

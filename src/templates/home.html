@@ -5,6 +5,9 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Home</title>
 
+	<script src="{{ url_for('static', filename='js/endpoint.js') }}"></script>
+	<script src="{{ url_for('static', filename='js/stock.js') }}"></script>
+
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
@@ -58,10 +61,12 @@
 
 			<h1>My stocks</h1>
 
-			<ul>
-				<li>GOOGL</li>
-				<li>NVDIA</li>
-			</ul>
+			<ul id="user-stocks"></ul>
+
+			<div class="container-fluid mb-3">
+				<button id="add-btn" type="button" class="btn btn-primary me-2">Add</button>
+				<input id="input-ticker" class="form-control" type="text" placeholder="Add ticker manually">
+			</div>
 
 			<button id="analysis-btn">Go to analysis</button>
 		</div>
@@ -70,6 +75,40 @@
 	<script>
 		// Update name link
 		document.getElementById('name-link').text = user["username"];
+
+		// Load stocks
+		getStocks(user["token"]).then(stocks => {
+			
+			for(let i = 0; i < stocks.length; i ++) {
+
+				let currentStock = stocks[i];
+				let ticker = currentStock[2];
+				let count = currentStock[3];
+
+				// Create a new list item
+				const list = document.getElementById("user-stocks");
+
+				const newItem = document.createElement("li");
+				newItem.textContent = `Ticker: ${ticker} Count: ${count}`;
+
+				list.appendChild(newItem);
+			}
+		}).catch(error => {
+			console.error('Error fetching tickers:', error);
+		});
+
+		// Add stock
+		document.getElementById('add-btn').addEventListener('click', function() {
+
+			const ticker = document.getElementById('input-ticker').value;
+			const count = 1;
+
+			addStocks(ticker, count, user["token"]).then(response => {
+				console.log(`${ticker} added successfully`);
+			}).catch(error => {
+				console.error('Error fetching tickers:', error);
+			});
+		});
 
 		// Sign out
 		document.getElementById('signout-btn').addEventListener('click', function() {
