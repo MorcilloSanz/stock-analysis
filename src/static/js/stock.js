@@ -54,14 +54,17 @@ async function getTickers() {
  *     console.error('Error fetching data:', error);
  * });
  */
-async function getData(tickers) {
+async function getData(tickers, days) {
 
 	const requestOptions = {
 		method: "GET",
 		redirect: "follow"
 	};
 
-	const params = new URLSearchParams({ tickers: tickers.join(",") });
+	const params = new URLSearchParams({ 
+		tickers: tickers.join(","), 
+		days: days 
+	});
 
 	try {
 
@@ -78,6 +81,12 @@ async function getData(tickers) {
 	}
 }
 
+/**
+ * Fetches the stock holdings of a user.
+ * 
+ * @param {string} token - A string containing the authorization token required to access the API.
+ * @returns {Promise<Object|Error>} - Returns a JSON object with the user's stocks if successful, or an error object if the request fails.
+ */
 async function getStocks(token) {
 
 	const myHeaders = new Headers();
@@ -103,6 +112,14 @@ async function getStocks(token) {
 	}
 }
 
+/**
+ * Adds a specified number of stocks to the user's holdings.
+ * 
+ * @param {string} ticker - The stock symbol (ticker) to add.
+ * @param {number} count - The quantity of stocks to add.
+ * @param {string} token - A string containing the authorization token required to access the API.
+ * @returns {Promise<Object|Error>} - Returns a JSON object with the updated stock information if successful, or an error object if the request fails.
+ */
 async function addStocks(ticker, count, token) {
 
 	const myHeaders = new Headers();

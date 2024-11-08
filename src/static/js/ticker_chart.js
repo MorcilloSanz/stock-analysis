@@ -148,9 +148,6 @@ function loadEntries(data, selectedTickers) {
 
         document.getElementById(id).addEventListener('click', function() {
 
-            document.getElementById('close-volume-analysis-container').style.visibility = 'visible';
-            document.getElementById('decision-container').style.visibility = 'visible';
-
             let analysisData = getCloseVolume(data, selectedTickers[i]);
 
             let dates = analysisData[0];

@@ -69,23 +69,6 @@
 
 	<main class="flex-shrink-0">
 
-		<div id="tickers-container" class="container">
-			<h1 class="display-5 mb-4">Welcome, select your tickers &#128075;</h1>
-			<select id="tickers" class="form-select mb-4" multiple></select>
-			<div class="d-flex align-items-center mb-4">
-				<button id="add-btn" type="button" class="btn btn-primary me-2">Add</button>
-				<input id="input-ticker" class="form-control" type="text" placeholder="Add ticker manually">
-			</div>
-			<select id="fav-tickers" class="form-select mb-4" multiple></select>
-			<div>
-				<button id="remove-btn" type="button" class="btn btn-danger mb-4">Remove</button>
-				<button id="run-btn" type="button" class="btn btn-success mb-4">Run</button>
-				<div id="spinner-animation" class="spinner-border text-secondary" role="status">
-					<span class="visually-hidden">Loading...</span>
-				</div>
-			</div>
-		</div>
-	
 		<div id="analytics-container">
 
 			<!-- Charts -->
@@ -102,11 +85,6 @@
 					<div class="col"><canvas id="chart4"></canvas></div>
 					<div class="col"><canvas id="chart5"></canvas></div>
 				</div>
-			</div>
-
-			<div id="section-title" class="container-fluid">
-				<h1>Close-Volume Analysis &#128204;</h1>
-				<p>Click a ticker to study the close and volume analysis</p>
 			</div>
 
 			<!-- Analytics -->
@@ -200,103 +178,19 @@
 		// Update name link
 		document.getElementById('name-link').text = user["username"];
 
-		// Get tickers request
-		getTickers().then(tickers => {
-			const select = document.getElementById('tickers');
+		// Get data request
+		let tickers = ["NVDA"]
+		getData(tickers, 365).then(data => {
 
-			for (const key in tickers.Ticker) {
+			// Generate charts
+			console.log(data);
+			generateChart(data, tickers);
 
-				const ticker = tickers.Ticker[key];
-				const name = tickers.Name[key];
+			// Load entries in table
+			loadEntries(data, tickers);
 
-				const option = document.createElement('option');
-				option.value = ticker;
-				option.textContent = name + ' (' + ticker + ')';
-
-				select.appendChild(option);
-			}
 		}).catch(error => {
-			console.error('Error fetching tickers:', error);
-		});
-
-		// Add tickers to favs button
-		document.getElementById('add-btn').addEventListener('click', function() {
-
-			const tickersSelect = document.getElementById('tickers');
-			const favTickersSelect = document.getElementById('fav-tickers');
-
-			// Manual
-			const inputText = document.getElementById('input-ticker').value;
-			if(inputText.length > 0) {
-				const exists = Array.from(favTickersSelect.options).some(favOption => favOption.value === inputText);
-
-				if(!exists) {
-					const newOption = document.createElement('option');
-					newOption.value = inputText;
-					newOption.text = inputText;
-					favTickersSelect.add(newOption);
-				}
-
-				inputText = document.getElementById('input-ticker').value = "";
-			}
-
-			// From select
-			else {
-				Array.from(tickersSelect.selectedOptions).forEach(option => {
-					const exists = Array.from(favTickersSelect.options).some(favOption => favOption.value === option.value);
-					
-					if (!exists) {
-						const newOption = document.createElement('option');
-						newOption.value = option.value;
-						newOption.text = option.value;
-						favTickersSelect.add(newOption);
-					}
-				});
-			}
-		});
-
-		function getFavTickers() {
-			const favTickersSelect = document.getElementById('fav-tickers');
-			const favTickersArray = [];
-
-			Array.from(favTickersSelect.options).forEach(option => {
-				favTickersArray.push(option.value);
-			});
-
-			return favTickersArray;
-		}
-
-		// Remove button
-		document.getElementById('remove-btn').addEventListener('click', function() {
-			const favTickersSelect = document.getElementById('fav-tickers');
-			Array.from(favTickersSelect.selectedOptions).forEach(option => {
-				option.remove();
-			});
-		});
-
-		// Run button
-		document.getElementById('run-btn').addEventListener('click', function() {
-
-			document.getElementById('spinner-animation').style.visibility = 'visible';
-			let favTickers = getFavTickers();
-
-			// Get data request
-			getData(favTickers).then(data => {
-
-				// Generate charts
-				console.log(data);
-				generateChart(data, favTickers);
-
-				// Hide menu and show charts
-				document.getElementById('tickers-container').style.display = 'none';
-				document.getElementById('analytics-container').style.visibility = 'visible';
-
-				// Load entries in table
-				loadEntries(data, favTickers);
-
-			}).catch(error => {
-				console.error('Error fetching data:', error);
-			});
+			console.error('Error fetching data:', error);
 		});
 
 		// Sign out

@@ -13,11 +13,6 @@ canvas {
 
 main > #analytics-container {
 	padding: 70px 15px 0;
-	visibility: hidden;
-}
-
-main > #tickers-container {
-	padding: 150px 15px 0;
 }
 
 #tickers-container .form-select {
@@ -67,21 +62,12 @@ form[role="search"] .form-control:focus {
 	box-shadow: 0 0 0 0.1rem rgba(255, 255, 255, 0.2);
 }
 
-#spinner-animation {
-	visibility: hidden;
-}
-
 #table-container {
 	padding: 50px 15px 0;
 	overflow: auto;
 }
 
-#close-volume-analysis-container {
-	visibility: hidden;
-}
-
 #decision-container {
-	visibility: hidden;
 	padding: 50px 15px 0;
 }
 

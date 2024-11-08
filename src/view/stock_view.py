@@ -42,10 +42,11 @@ def stock_data():
 		?tickers=AAPL,MSFT,GOOGL
     """
 	companies_tickers: str = request.args.get('tickers')
+	days: str = request.args.get('days')
 
 	# Get companies data
 	stock_controller: StockController = StockController()
-	companies_data: pd.DataFrame = stock_controller.companies_data(companies_tickers, days=365)
+	companies_data: pd.DataFrame = stock_controller.companies_data(companies_tickers, days=int(days))
 
 	# Return response
 	response = make_response(companies_data.to_json())
