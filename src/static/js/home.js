@@ -58,18 +58,37 @@ function createLi(list, ticker, count) {
 		buttonDelete.textContent = "Delete";
 		divButtons.appendChild(buttonDelete);
 
+		buttonDelete.addEventListener('click', function() {
+			
+			deleteStocks(ticker, user["token"]).then(response => {
+
+				console.log(`${ticker} deleted successfully`);
+				list.removeChild(li);
+
+			}).catch(error => {
+				console.error('Error fetching tickers:', error);
+			});
+		});
+
 		const buttonModify = document.createElement("button");
 		buttonModify.className = "btn btn-secondary";
 		buttonModify.textContent = "Modify";
 		divButtons.appendChild(buttonModify);
 
 		buttonModify.addEventListener('click', function() {
-			// Update in database
-			let newCount = prompt('Count');
-			console.log(newCount)
-			// Update in screen
-			let money = price * count;
-			divContent.innerHTML = `<p><strong>Count:</strong> ${newCount} <strong>Money:</strong> ${Number(money).toFixed(2)}€</p>`;
+
+			let count = prompt('Count');
+			
+			updateStocks(ticker, count, user["token"]).then(response => {
+
+				console.log(`${ticker} updated successfully`);
+
+				let money = price * Number(count);
+				divContent.innerHTML = `<p><strong>Count:</strong> ${count} <strong>Money:</strong> ${Number(money).toFixed(2)}€</p>`;
+
+			}).catch(error => {
+				console.error('Error fetching tickers:', error);
+			});
 		});
 
 		const buttonAnalyze = document.createElement("button");
@@ -91,8 +110,6 @@ function createLi(list, ticker, count) {
 
 // Load stocks
 getStocks(user["token"]).then(stocks => {
-
-	console.log(stocks)
 
 	for(let i = 0; i < stocks.length; i ++) {
 

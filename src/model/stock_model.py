@@ -111,3 +111,25 @@ class StockModel(AuthModel):
 
 		db.commit()
 		cursor.close()
+
+
+	def delete_stocks(self, ticker: str, token: str) -> None:
+		"""
+		Deletes the stocks of a specific ticker belonging to the user identified by the token.
+
+		1. Constructs a SQL query.
+		2. Executes the delete and commits the transaction.
+
+		Args:
+			ticker (str): The ticker symbol of the stock to update.
+			token (str): The authorization token to identify the user.
+		"""
+		db = g.db
+		cursor = db.cursor()
+
+		sql = f"DELETE FROM STOCKS WHERE TICKER = '{ticker}' AND USER_ID = (SELECT USER_ID FROM TOKEN WHERE TOKEN='{token}');"
+		cursor.execute(sql)
+
+		db.commit()
+		cursor.close()
+

@@ -162,3 +162,32 @@ def update_stocks():
 		response = jsonify({'error': 'could not update stocks'}), 400
 
 	return response
+
+
+@stock.route('/delete_stocks', methods=('GET', 'POST'))
+def delete_stocks():
+	"""
+	Delete the user's existing stock information based on the ticker symbol and new stock count provided in request arguments.
+		
+	Returns:
+		JSON response with a success message or an error if the update failed.
+
+	HTTP Headers:
+		Authorization: the token of the user.
+
+	Params:
+		ticker
+	"""
+	ticker: str = request.args.get('ticker')
+	token: str = request.headers.get('Authorization')
+
+	stock_controller: StockController = StockController()
+
+	response = make_response(jsonify({'message' : 'stocks deleted'}))
+
+	try:
+		stock_controller.delete_stocks(ticker, token)
+	except:
+		response = jsonify({'error': 'could not delete stocks'}), 400
+
+	return response

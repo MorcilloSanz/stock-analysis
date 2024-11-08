@@ -87,3 +87,17 @@ class StockController(DatabaseController):
 			token (str): The authorization token to identify the user.
 		"""
 		self.model.update_stocks(ticker, count, token)
+
+
+	def delete_stocks(self, ticker: str, token: str) -> None:
+		"""
+		Deletes the stocks of a specific ticker belonging to the user identified by the token.
+
+		1. Constructs a SQL query.
+		2. Executes the delete and commits the transaction.
+
+		Args:
+			ticker (str): The ticker symbol of the stock to update.
+			token (str): The authorization token to identify the user.
+		"""
+		self.model.delete_stocks(ticker, token)

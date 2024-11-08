@@ -149,3 +149,62 @@ async function addStocks(ticker, count, token) {
 		return error;
 	}
 }
+
+async function updateStocks(ticker, count, token) {
+
+	const myHeaders = new Headers();
+	myHeaders.append("Authorization", token);
+
+	const params = new URLSearchParams({ 
+		ticker: ticker,
+		count: count
+	});
+
+	const requestOptions = {
+		method: "POST",
+		headers: myHeaders,
+		redirect: "follow"
+	};
+
+	try {
+		const response = await fetch(`${URL_BASE}${END_POINT_UPDATE_STOCKS}?${params}`, requestOptions);
+
+		if (!response.ok) {
+			throw new Error("Network response was not ok " + response.statusText);
+		}
+
+		const result = await response.json();
+		return result;
+	}catch (error) {
+		return error;
+	}
+}
+
+async function deleteStocks(ticker, token) {
+
+	const myHeaders = new Headers();
+	myHeaders.append("Authorization", token);
+
+	const params = new URLSearchParams({ 
+		ticker: ticker
+	});
+
+	const requestOptions = {
+		method: "POST",
+		headers: myHeaders,
+		redirect: "follow"
+	};
+
+	try {
+		const response = await fetch(`${URL_BASE}${END_POINT_DELETE_STOCKS}?${params}`, requestOptions);
+
+		if (!response.ok) {
+			throw new Error("Network response was not ok " + response.statusText);
+		}
+
+		const result = await response.json();
+		return result;
+	}catch (error) {
+		return error;
+	}
+}
