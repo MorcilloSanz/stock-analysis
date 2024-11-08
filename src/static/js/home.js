@@ -69,7 +69,7 @@ function createLi(list, ticker, count) {
 		divButtons.appendChild(buttonAnalyze);
 
 		buttonAnalyze.addEventListener('click', function() {
-			window.location.replace("{{ url_for('analysis') }}");
+			window.location.replace(analysisURL + '?ticker=' + ticker);
 		});
 
 		div.appendChild(divButtons);

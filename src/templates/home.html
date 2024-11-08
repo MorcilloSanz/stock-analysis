@@ -78,6 +78,8 @@
 	</main>
 
 	<script>
+		const analysisURL = "{{ url_for('analysis') }}";
+
 		// Sign out
 		document.getElementById('signout-btn').addEventListener('click', function() {
 			sessionStorage.setItem('user', null);
