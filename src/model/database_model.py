@@ -17,7 +17,7 @@ class DatabaseModel(Model):
 		"""
 		Opens a new connection.
 		"""
-		self.database.open_connection()
+		return self.database.open_connection()
 
 
 	def close_connection(self):

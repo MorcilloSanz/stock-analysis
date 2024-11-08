@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, g
 from flask_cors import CORS
 
 from database.database import *
@@ -15,6 +15,17 @@ app.config['CORS_HEADERS'] = 'Content-Type'
 
 app.register_blueprint(stock)
 app.register_blueprint(auth)
+
+
+@app.before_request
+def before_request():
+    g.db = DataBase().open_connection()
+
+
+@app.teardown_appcontext
+def teardown(exception):
+    if hasattr(g, 'db'):
+        DataBase().close_connection()
 
 
 @app.route('/')
@@ -41,12 +52,10 @@ def generate_database() -> None:
     """
     Generates a new database if not exists and registers the ADMIN user.
     """
-    database: DataBase = DataBase.get_instance()
+    database: DataBase = DataBase()
 
     if not database.exists():
-        database.open_connection()
         database.create_database()
-        database.close_connection()
 
 
 if __name__ == '__main__':

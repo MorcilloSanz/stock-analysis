@@ -92,11 +92,13 @@ function createLi(list, ticker, count) {
 // Load stocks
 getStocks(user["token"]).then(stocks => {
 
+	console.log(stocks)
+
 	for(let i = 0; i < stocks.length; i ++) {
 
 		let currentStock = stocks[i];
-		let ticker = currentStock[2];
-		let count = currentStock[3];
+		let ticker = currentStock['TICKER'];
+		let count = currentStock['COUNT'];
 
 		// Create a new list item
 		const list = document.getElementById("user-stocks");
@@ -167,17 +169,4 @@ document.getElementById('add-btn').addEventListener('click', function() {
 			});
 		});
 	}
-});
-
-// Add stock
-document.getElementById('add-btn').addEventListener('click', function() {
-
-	const ticker = document.getElementById('input-ticker').value;
-	const count = 1;
-
-	addStocks(ticker, count, user["token"]).then(response => {
-		console.log(`${ticker} added successfully`);
-	}).catch(error => {
-		console.error('Error fetching tickers:', error);
-	});
 });

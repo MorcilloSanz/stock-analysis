@@ -76,12 +76,11 @@ def stocks():
 
 	stock_controller: StockController = StockController()
 
-	stock_controller.open_connection()
 	try:
 		user_stocks = stock_controller.get_stocks(token)
+		user_stocks = [dict(row) for row in user_stocks]
 	except:
 		return jsonify({'error' : 'unauthorized'}, 401)
-	stock_controller.close_connection()
 
 	response = make_response(jsonify(user_stocks))
 	return response
@@ -118,12 +117,10 @@ def add_stocks():
 
 	response = make_response(jsonify({'message' : 'stocks added'}))
 
-	stock_controller.open_connection()
 	try:
 		stock_controller.add_stocks(ticker, count, token)
 	except:
 		response = jsonify({'error': 'stocks already exists, pls update them'}), 400
-	stock_controller.close_connection()
 
 	return response
 
@@ -159,11 +156,9 @@ def update_stocks():
 
 	response = make_response(jsonify({'message' : 'stocks updated'}))
 
-	stock_controller.open_connection()
 	try:
 		stock_controller.update_stocks(ticker, count, token)
 	except:
 		response = jsonify({'error': 'could not update stocks'}), 400
-	stock_controller.close_connection()
 
 	return response

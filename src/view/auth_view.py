@@ -23,9 +23,7 @@ def login():
 
     auth_controller: AuthController = AuthController()
 
-    auth_controller.open_connection()
     user = auth_controller.verify_user(username, password)
-    auth_controller.close_connection()
 
     if len(user) == 0:
         return 'Bad login', 401
@@ -34,9 +32,7 @@ def login():
     
     if user[0][1] == username and str(user[0][3]) == str(AuthController.sha256(password)):
 
-        auth_controller.open_connection()
         token = auth_controller.get_token(int(user[0][0]))
-        auth_controller.close_connection()
 
         response['user'] = {
             'id' : user[0][0],
@@ -71,11 +67,9 @@ def register():
 
     response = jsonify({'message': f'{username} registered successfully'}), 200
 
-    auth_controller.open_connection()
     try:
         auth_controller.register_user(username, email, password)
     except:
         response  = jsonify({'error': 'The user already exists'}), 400
-    auth_controller.close_connection()
 
     return response

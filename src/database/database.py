@@ -1,5 +1,5 @@
 import sqlite3
-import threading
+from threading import local
 from pathlib import Path
 
 
@@ -13,14 +13,20 @@ class DataBase:
 	"""
 
 	__instance = None
+	_lock = local()
 
 
 	def __init__(self) -> None:
 		self.con = None
 		self.cur = None
 		self.open: bool = False
-		self.lock = threading.Lock()
 	
+
+	def __new__(cls):
+		if cls.__instance is None:
+			cls.__instance = super().__new__(cls)
+		return cls.__instance
+
 
 	@staticmethod
 	def get_instance() -> any:
@@ -40,24 +46,25 @@ class DataBase:
 		"""
 		Opens a new connection.
 		"""
-		with self.lock:
+		if not hasattr(self._lock, 'db'):
 
 			script_dir: Path = Path(__file__).resolve().parent
 			file_path: Path = script_dir / DATABASE
 
-			self.con = sqlite3.connect(file_path)
-			self.cur = self.con.cursor()
+			self._lock.db = sqlite3.connect(file_path, check_same_thread=False)
+			self._lock.db.row_factory = sqlite3.Row
 
-			self.open = True
+		return self._lock.db
 
 
 	def close_connection(self) -> None:
 		"""
 		Closes the current connection.
 		"""
-		with self.lock:
-			self.con.close()
-			self.open = False
+		db = getattr(self._lock, 'db', None)
+		if db:
+			db.close()
+			del self._lock.db
 
 
 	def __get_sql(self) -> str:
@@ -84,7 +91,9 @@ class DataBase:
 		Creates a database if not exists.
 		"""
 		sql = self.__get_sql()
-		self.cur.executescript(sql)
+		db = self.open_connection()
+		db.cursor().executescript(sql)
+		db.commit()
 
 
 	def exists(self) -> bool:
