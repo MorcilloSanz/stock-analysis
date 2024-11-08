@@ -63,6 +63,15 @@ function createLi(list, ticker, count) {
 		buttonModify.textContent = "Modify";
 		divButtons.appendChild(buttonModify);
 
+		buttonModify.addEventListener('click', function() {
+			// Update in database
+			let newCount = prompt('Count');
+			console.log(newCount)
+			// Update in screen
+			let money = price * count;
+			divContent.innerHTML = `<p><strong>Count:</strong> ${newCount} <strong>Money:</strong> ${Number(money).toFixed(2)}€</p>`;
+		});
+
 		const buttonAnalyze = document.createElement("button");
 		buttonAnalyze.className = "btn btn-primary";
 		buttonAnalyze.textContent = "Analyze";

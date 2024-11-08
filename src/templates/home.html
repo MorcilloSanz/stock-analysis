@@ -59,21 +59,19 @@
 
 	<main>
 
-		<div class="container" style="padding: 70px 15px 0;">
+		<div class="container" style="padding: 80px 15px 0;">
 			<h1 class="mb-3">My stocks &#128182;</h1>
 			<ul id="user-stocks" class="list-group mb-3"></ul>
 		</div>
 
-		<div id="tickers-container" class="container">
-			<h1 class="mb-3">Add stocks &#128203;</h1>
+		<div id="tickers-container" class="container" style="padding: 20px 15px 0;">
+			<h3 class="mb-3">Add stocks</h3>
 			<select id="tickers" class="form-select mb-4" multiple></select>
 			<div class="d-flex align-items-center mb-4">
 				<button id="add-btn" type="button" class="btn btn-primary me-2">Add</button>
 				<input id="input-ticker" class="form-control" type="text" placeholder="Add ticker manually">
 			</div>
 		</div>
-
-		<button id="analysis-btn" type="button" class="btn">Go to analysis</button>
 
 	</main>
 
@@ -85,11 +83,6 @@
 			sessionStorage.setItem('user', null);
 			console.log(sessionStorage.getItem('user'))
 			window.location.replace("{{ url_for('index') }}");
-		});
-
-		// Analysis button
-		document.getElementById('analysis-btn').addEventListener('click', function() {
-			window.location.replace("{{ url_for('analysis') }}");
 		});
 	</script>
 
