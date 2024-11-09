@@ -148,7 +148,10 @@ function loadEntries(data, selectedTickers) {
     let volumeDataSmooth = lowpass(volumeData, windowSize);
 
     let closeTimeDerivative = timeDerivative(closeDataSmooth);
+    let closeTimeSecondDerivative = timeDerivative(closeTimeDerivative);
+
     let volumeTimeDerivative = timeDerivative(volumeDataSmooth);
+    let volumeTimeSecondDerivative = timeDerivative(volumeTimeDerivative);
 
     // Close chart
     let closeDatasets = [];
@@ -182,9 +185,16 @@ function loadEntries(data, selectedTickers) {
 
     // Close Derivative (trend) chart
     let closeDerivativeDatasets = [];
+
     closeDerivativeDatasets.push({
         label: "Close (smooth) time derivative = trend",
         data: closeTimeDerivative,
+        borderWidth: 1
+    });
+
+    closeDerivativeDatasets.push({
+        label: "Close (smooth) time second derivative",
+        data: closeTimeSecondDerivative,
         borderWidth: 1
     });
     
@@ -192,9 +202,16 @@ function loadEntries(data, selectedTickers) {
 
     // Volume Derivative chart
     let volumeDerivativeDatasets = [];
+
     volumeDerivativeDatasets.push({
         label: "Volume (smooth) time derivative",
         data: volumeTimeDerivative,
+        borderWidth: 1
+    });
+
+    volumeDerivativeDatasets.push({
+        label: "Volume (smooth) time second derivative",
+        data: volumeTimeSecondDerivative,
         borderWidth: 1
     });
     
