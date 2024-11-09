@@ -54,8 +54,8 @@ function createLi(list, ticker, count) {
 		const divButtons = document.getElementById(`buttonsContainer-${ticker}`);
 
 		const buttonDelete = document.createElement("button");
-		buttonDelete.className = "btn btn-danger";
-		buttonDelete.textContent = "Delete";
+		buttonDelete.className = "btn btn-danger bi bi-trash";
+		buttonDelete.textContent = "";
 		divButtons.appendChild(buttonDelete);
 
 		buttonDelete.addEventListener('click', function() {
@@ -71,13 +71,16 @@ function createLi(list, ticker, count) {
 		});
 
 		const buttonModify = document.createElement("button");
-		buttonModify.className = "btn btn-secondary";
-		buttonModify.textContent = "Modify";
+		buttonModify.className = "btn btn-secondary bi bi-gear";
+		
+		buttonModify.textContent = "";
 		divButtons.appendChild(buttonModify);
 
 		buttonModify.addEventListener('click', function() {
 
 			let count = prompt('Count');
+			if(count == null) 
+				return;
 			
 			updateStocks(ticker, count, user["token"]).then(response => {
 
@@ -92,8 +95,8 @@ function createLi(list, ticker, count) {
 		});
 
 		const buttonAnalyze = document.createElement("button");
-		buttonAnalyze.className = "btn btn-primary";
-		buttonAnalyze.textContent = "Analyze";
+		buttonAnalyze.className = "btn btn-primary bi bi-bar-chart";
+		buttonAnalyze.textContent = "";
 		divButtons.appendChild(buttonAnalyze);
 
 		buttonAnalyze.addEventListener('click', function() {

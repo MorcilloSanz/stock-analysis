@@ -115,109 +115,96 @@ function loadEntries(data, selectedTickers) {
 
     // Load table
 	let tbody = document.getElementById("stock-entries");
-	let html = "";
 
-	for(let i = 0; i < selectedTickers.length; i ++) {
+    let ticker = selectedTickers[0];
+    let html = `<tr><td><strong>${ticker}</strong></td>`;
+    
+    for(let j = 0; j < vars.length; j ++) {
 
-        let button = `<button id='button-${selectedTickers[i]}' type='button' class='btn btn-link'>${selectedTickers[i]}</button>`;
-        html += `<tr><th scope='row'>${i + 1}</th><td>${button}</td>`;
+        let pair = "('" + ticker + "', '" + vars[j] + "')";
 
-		let ticker = selectedTickers[i];
-        for(let j = 0; j < vars.length; j ++) {
+        let lastEntry = null;
+        for(const key in data[pair])
+            lastEntry = data[pair][key];
 
-            let pair = "('" + ticker + "', '" + vars[j] + "')";
+        html += `<td>${lastEntry}</td>`
+    }
 
-            let lastEntry = null;
-            for(const key in data[pair])
-                lastEntry = data[pair][key];
+    const today = new Date();
+    const formattedDate = today.toISOString().split('T')[0];
 
-            html += `<td>${lastEntry}</td>`
-        }
-
-        const today = new Date();
-        const formattedDate = today.toISOString().split('T')[0];
-
-        html += `<td>${formattedDate}</td><tr>`;
-	}
-
+    html += `<td>${formattedDate}</td><tr>`;
     tbody.innerHTML = html;
 
-    // Buttons events
-    for(let i = 0; i < selectedTickers.length; i ++) {
-        let id = `button-${selectedTickers[i]}`;
+    // Analysis charts
+    let analysisData = getCloseVolume(data, selectedTickers[0]);
 
-        document.getElementById(id).addEventListener('click', function() {
+    let dates = analysisData[0];
+    let closeData = analysisData[1];
+    let volumeData = analysisData[2];
 
-            let analysisData = getCloseVolume(data, selectedTickers[i]);
+    let windowSize = 10;
+    let closeDataSmooth = lowpass(closeData, windowSize);
+    let volumeDataSmooth = lowpass(volumeData, windowSize);
 
-            let dates = analysisData[0];
-            let closeData = analysisData[1];
-            let volumeData = analysisData[2];
+    let closeTimeDerivative = timeDerivative(closeDataSmooth);
+    let volumeTimeDerivative = timeDerivative(volumeDataSmooth);
 
-            let windowSize = 10;
-            let closeDataSmooth = lowpass(closeData, windowSize);
-            let volumeDataSmooth = lowpass(volumeData, windowSize);
+    // Close chart
+    let closeDatasets = [];
+    closeDatasets.push({
+        label: "Close",
+        data: closeData,
+        borderWidth: 1
+    });
+    closeDatasets.push({
+        label: "Close smooth",
+        data: closeDataSmooth,
+        borderWidth: 1
+    });
+    
+    chart('Close', dates, closeDatasets, "Close Analysis");
 
-            let closeTimeDerivative = timeDerivative(closeDataSmooth);
-            let volumeTimeDerivative = timeDerivative(volumeDataSmooth);
+    // Volume chart
+    let volumeDatasets = [];
+    volumeDatasets.push({
+        label: "Volume",
+        data: volumeData,
+        borderWidth: 1
+    });
+    volumeDatasets.push({
+        label: "Volume smooth",
+        data: volumeDataSmooth,
+        borderWidth: 1
+    });
+    
+    chart('Volume', dates, volumeDatasets, "Volume Analysis");
 
-            // Close chart
-            let closeDatasets = [];
-            closeDatasets.push({
-                label: "Close",
-                data: closeData,
-                borderWidth: 1
-            });
-            closeDatasets.push({
-                label: "Close smooth",
-                data: closeDataSmooth,
-                borderWidth: 1
-            });
-            
-            chart('Close', dates, closeDatasets, "Close Analysis");
+    // Close Derivative (trend) chart
+    let closeDerivativeDatasets = [];
+    closeDerivativeDatasets.push({
+        label: "Close (smooth) time derivative = trend",
+        data: closeTimeDerivative,
+        borderWidth: 1
+    });
+    
+    chart('DerivativeClose', dates, closeDerivativeDatasets);
 
-            // Volume chart
-            let volumeDatasets = [];
-            volumeDatasets.push({
-                label: "Volume",
-                data: volumeData,
-                borderWidth: 1
-            });
-            volumeDatasets.push({
-                label: "Volume smooth",
-                data: volumeDataSmooth,
-                borderWidth: 1
-            });
-            
-            chart('Volume', dates, volumeDatasets, "Volume Analysis");
+    // Volume Derivative chart
+    let volumeDerivativeDatasets = [];
+    volumeDerivativeDatasets.push({
+        label: "Volume (smooth) time derivative",
+        data: volumeTimeDerivative,
+        borderWidth: 1
+    });
+    
+    chart('DerivativeVolume', dates, volumeDerivativeDatasets);
 
-            // Close Derivative (trend) chart
-            let closeDerivativeDatasets = [];
-            closeDerivativeDatasets.push({
-                label: "Close (smooth) time derivative = trend",
-                data: closeTimeDerivative,
-                borderWidth: 1
-            });
-            
-            chart('DerivativeClose', dates, closeDerivativeDatasets);
+    // Decision tree
+    let decision = solveDecisionTree(
+        closeTimeDerivative[closeTimeDerivative.length - 1], 
+        volumeTimeDerivative[volumeTimeDerivative.length - 1]
+    );
 
-            // Volume Derivative chart
-            let volumeDerivativeDatasets = [];
-            volumeDerivativeDatasets.push({
-                label: "Volume (smooth) time derivative",
-                data: volumeTimeDerivative,
-                borderWidth: 1
-            });
-            
-            chart('DerivativeVolume', dates, volumeDerivativeDatasets);
-
-            // Decision tree
-            let decision = solveDecisionTree(
-                closeTimeDerivative[closeTimeDerivative.length - 1], 
-                volumeTimeDerivative[volumeTimeDerivative.length - 1]
-            );
-
-            document.getElementById(`decision${decision}`).classList.add('table-primary');
-        });
-    }
+    document.getElementById(`decision${decision}`).classList.add('table-primary');
 }
