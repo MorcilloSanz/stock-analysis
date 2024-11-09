@@ -150,6 +150,14 @@ async function addStocks(ticker, count, token) {
 	}
 }
 
+/**
+ * Updates the number of stocks in the user's holdings for a specific ticker.
+ * 
+ * @param {string} ticker - The stock symbol (ticker) to update.
+ * @param {number} count - The new quantity of stocks to set.
+ * @param {string} token - A string containing the authorization token required to access the API.
+ * @returns {Promise<Object|Error>} - Returns a JSON object with the updated stock information if successful, or an error object if the request fails.
+ */
 async function updateStocks(ticker, count, token) {
 
 	const myHeaders = new Headers();
@@ -180,6 +188,13 @@ async function updateStocks(ticker, count, token) {
 	}
 }
 
+/**
+ * Removes a specified stock from the user's holdings.
+ * 
+ * @param {string} ticker - The stock symbol (ticker) to delete from holdings.
+ * @param {string} token - A string containing the authorization token required to access the API.
+ * @returns {Promise<Object|Error>} - Returns a JSON object with the updated stock information if successful, or an error object if the request fails.
+ */
 async function deleteStocks(ticker, token) {
 
 	const myHeaders = new Headers();

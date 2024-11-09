@@ -37,21 +37,21 @@ function createLi(list, ticker, count) {
 		let color = 'lightgreen';
 		if(diff < 0) color = 'red';
 
-		let arrow = "↑";
-		if(diff < 0) arrow = "↓";
+		let arrow = "&#9650;";
+		if(diff < 0) arrow = "&#9660;";
 
-		div.innerHTML = `<h3 class="mb-3" style="display: inline; padding-bottom: 10px;">${ticker}</h3>
-			<p class="mb-3" style="display: inline; margin-left: 3px; color: ${color}; font-weight: bold;">${Number(diff).toFixed(2)}${arrow}</p>`;
+		div.innerHTML = `
+		<div style="display: flex; justify-content: space-between; align-items: center;">
+			<div>
+				<h3 class="mb-3" style="display: inline; padding-bottom: 10px;">${ticker}</h3>
+				<p class="mb-3" style="display: inline; margin-left: 3px; color: ${color}; font-weight: bold;">${arrow} ${Number(diff).toFixed(2)}</p>
+				<p id="p-info-${ticker}" class="mb-3 text-body-secondary"><strong>Count:</strong> ${count} <strong>Money:</strong> ${Number(money).toFixed(2)}€</p>
+			</div>
+			<div id="buttonsContainer-${ticker}" style="display: flex; gap: 10px;"></div>
+		</div>`;
 
-		const divContent = document.createElement("div");
-		divContent.style="margin-top:0px;"
-		divContent.innerHTML = `<p><strong>Count:</strong> ${count} <strong>Money:</strong> ${Number(money).toFixed(2)}€</p>`;
-
-		const divButtons = document.createElement("div");
-		divButtons.style.display = "flex";
-		divButtons.style.justifyContent = "flex-end";
-		divButtons.style.alignItems = "center";
-		divButtons.style.gap = "10px"; 
+		// Buttons
+		const divButtons = document.getElementById(`buttonsContainer-${ticker}`);
 
 		const buttonDelete = document.createElement("button");
 		buttonDelete.className = "btn btn-danger";
@@ -84,7 +84,7 @@ function createLi(list, ticker, count) {
 				console.log(`${ticker} updated successfully`);
 
 				let money = price * Number(count);
-				divContent.innerHTML = `<p><strong>Count:</strong> ${count} <strong>Money:</strong> ${Number(money).toFixed(2)}€</p>`;
+				document.getElementById(`p-info-${ticker}`).innerHTML = `<strong>Count:</strong> ${count} <strong>Money:</strong> ${Number(money).toFixed(2)}€`;
 
 			}).catch(error => {
 				console.error('Error fetching tickers:', error);
@@ -100,9 +100,7 @@ function createLi(list, ticker, count) {
 			window.location.replace(analysisURL + '?ticker=' + ticker);
 		});
 
-		div.appendChild(divButtons);
-		div.appendChild(divContent);
-
+		//div.appendChild(divButtons);
 	}).catch(error => {
 		console.error('Error fetching data:', error);
 	});

@@ -59,17 +59,29 @@
 
 	<main>
 
-		<div class="container" style="padding: 80px 15px 0;">
-			<h1 class="mb-3">My stocks &#128182;</h1>
+		<div class="container" style="padding: 120px 15px 0;">
 			<ul id="user-stocks" class="list-group mb-3"></ul>
 		</div>
 
 		<div id="tickers-container" class="container" style="padding: 20px 15px 0;">
-			<h3 class="mb-3">Add stocks</h3>
-			<select id="tickers" class="form-select mb-4" multiple></select>
-			<div class="d-flex align-items-center mb-4">
-				<button id="add-btn" type="button" class="btn btn-primary me-2">Add</button>
-				<input id="input-ticker" class="form-control" type="text" placeholder="Add ticker manually">
+			<div class="accordion" id="accordionExample">
+				<div class="accordion-item">
+					<h2 class="accordion-header" id="headingOne">
+						<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+							Add tickers
+						</button>
+					</h2>
+					<div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+						<div class="accordion-body">
+							<!-- Código de selección de tickers -->
+							<select id="tickers" class="form-select mb-4" multiple></select>
+							<div class="d-flex align-items-center mb-4">
+							<button id="add-btn" type="button" class="btn btn-primary me-2">Add</button>
+							<input id="input-ticker" class="form-control" type="text" placeholder="Add ticker manually">
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 
