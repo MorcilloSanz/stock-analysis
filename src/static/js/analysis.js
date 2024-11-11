@@ -38,6 +38,22 @@ function lowpass(data, windowSize) {
     return movingAverage;
 }
 
+function linearRegression(x, y) {
+
+    const n = x.length;
+  
+    const sumX = x.reduce((acc, val) => acc + val, 0);
+    const sumY = y.reduce((acc, val) => acc + val, 0);
+    const sumXY = x.reduce((acc, val, i) => acc + val * y[i], 0);
+    const sumX2 = x.reduce((acc, val) => acc + val * val, 0);
+  
+    const m = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);
+    const b = (sumY - m * sumX) / n;
+  
+    return [m, b];
+  }
+  
+
 function solveDecisionTree(closeVariation, volumeVariation) {
 
 	if(closeVariation > 0) {

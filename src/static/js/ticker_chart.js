@@ -103,6 +103,155 @@ function getCloseVolume(data, ticker) {
     return [dates, closeData, volumeData];
 }
 
+function computeFunctions(data, windowSize) {
+
+    const dataSmooth = lowpass(data, windowSize);
+    const derivative = timeDerivative(dataSmooth);
+    const secondDerivative = timeDerivative(derivative);
+
+    return [dataSmooth, derivative, secondDerivative];
+}
+
+function baseAnalysisCharts(dates, closeData, volumeData, closeFunctions, volumeFunctions, sufix) {
+
+    let closeDatasets = [];
+    closeDatasets.push({
+        label: "Close",
+        data: closeData,
+        borderWidth: 1
+    });
+
+    closeDatasets.push({
+        label: "Close smooth",
+        data: closeFunctions[0],
+        borderWidth: 1
+    });
+    
+    chart('Close' + sufix, dates, closeDatasets, "Close Analysis");
+
+    // Volume chart
+    let volumeDatasets = [];
+    volumeDatasets.push({
+        label: "Volume",
+        data: volumeData,
+        borderWidth: 1
+    });
+
+    volumeDatasets.push({
+        label: "Volume smooth",
+        data: volumeFunctions[0],
+        borderWidth: 1
+    });
+    
+    chart('Volume' + sufix, dates, volumeDatasets, "Volume Analysis");
+
+    // Close Derivative (trend) chart
+    let closeDerivativeDatasets = [];
+
+    closeDerivativeDatasets.push({
+        label: "Close (smooth) time derivative = trend",
+        data: closeFunctions[1],
+        borderWidth: 1
+    });
+
+    closeDerivativeDatasets.push({
+        label: "Close (smooth) time second derivative",
+        data: closeFunctions[2],
+        borderWidth: 1
+    });
+    
+    chart('DerivativeClose' + sufix, dates, closeDerivativeDatasets);
+
+    // Volume Derivative chart
+    let volumeDerivativeDatasets = [];
+
+    volumeDerivativeDatasets.push({
+        label: "Volume (smooth) time derivative",
+        data: volumeFunctions[1],
+        borderWidth: 1
+    });
+
+    volumeDerivativeDatasets.push({
+        label: "Volume (smooth) time second derivative",
+        data: volumeFunctions[2],
+        borderWidth: 1
+    });
+    
+    chart('DerivativeVolume' + sufix, dates, volumeDerivativeDatasets);
+}
+
+function shortTerm(dates, closeData, volumeData, closeFunctions, volumeFunctions) {
+
+    const lastDays = 30;
+
+    const lastDates = dates.slice(-lastDays);
+    const lastCloseData = closeData.slice(-lastDays);
+    const lastVolumeData = volumeData.slice(-lastDays);
+
+    for(let i = 0; i < closeFunctions.length; i ++) {
+        closeFunctions[i] = closeFunctions[i].slice(-lastDays);
+        volumeFunctions[i] = volumeFunctions[i].slice(-lastDays);
+    }
+
+    baseAnalysisCharts(lastDates, lastCloseData, lastVolumeData, closeFunctions, volumeFunctions, "ST");
+
+    // Decision tree
+    const closeTimeDerivative = closeFunctions[1];
+    const volumeTimeDerivative = volumeFunctions[1];
+
+    const decision = solveDecisionTree(
+        closeTimeDerivative[closeTimeDerivative.length - 1], 
+        volumeTimeDerivative[volumeTimeDerivative.length - 1]
+    );
+
+    document.getElementById(`decision${decision}`).classList.add('table-primary');
+}
+
+function mediumTerm(dates, closeData, volumeData, closeFunctions, volumeFunctions) {
+
+    const lastDays = 120;
+
+    const lastDates = dates.slice(-lastDays);
+    const lastCloseData = closeData.slice(-lastDays);
+    const lastVolumeData = volumeData.slice(-lastDays);
+
+    for(let i = 0; i < closeFunctions.length; i ++) {
+        closeFunctions[i] = closeFunctions[i].slice(-lastDays);
+        volumeFunctions[i] = volumeFunctions[i].slice(-lastDays);
+    }
+
+    baseAnalysisCharts(lastDates, lastCloseData, lastVolumeData, closeFunctions, volumeFunctions, "MT");
+
+    // Deep Learning approach
+}
+
+function longTerm(dates, closeData, volumeData, closeFunctions, volumeFunctions) {
+
+    baseAnalysisCharts(dates, closeData, volumeData, closeFunctions, volumeFunctions, "LT");
+
+    // Linear regression
+    const n = dates.length;
+    const x = Array.from({ length: n }, (_, i) => i);
+    const y = closeFunctions[0];
+
+    const line = linearRegression(x, y);
+    console.log(line);
+
+    //y = mx + b
+    const lineData = [line[1], (n - 1) * line[0] + line[1]];
+    const lineDates = [dates[0], dates[n - 1]];
+
+    // Plot
+    let lineDatasets = [];
+    lineDatasets.push({
+        label: "Trend",
+        data: lineData,
+        borderWidth: 1
+    });
+    
+    chart('LinearRegressionLT', lineDates, lineDatasets, "");
+}
+
 /**
  * Loads a table of stock entries and dynamically generates rows with ticker data.
  * 
@@ -143,85 +292,24 @@ function loadEntries(data, selectedTickers) {
     let closeData = analysisData[1];
     let volumeData = analysisData[2];
 
-    let windowSize = 10;
-    let closeDataSmooth = lowpass(closeData, windowSize);
-    let volumeDataSmooth = lowpass(volumeData, windowSize);
+    let windowSizeST = 5;
+    const closeFunctionsST = computeFunctions(closeData, windowSizeST);
+    const volumeFunctionsST = computeFunctions(volumeData, windowSizeST); // Volume small window size always
 
-    let closeTimeDerivative = timeDerivative(closeDataSmooth);
-    let closeTimeSecondDerivative = timeDerivative(closeTimeDerivative);
+    let windowSizeMT = 10;
+    const closeFunctionsMT = computeFunctions(closeData, windowSizeMT);
+    const volumeFunctionsMT = computeFunctions(volumeData, windowSizeST); // Volume small window size always
 
-    let volumeTimeDerivative = timeDerivative(volumeDataSmooth);
-    let volumeTimeSecondDerivative = timeDerivative(volumeTimeDerivative);
+    let windowSizeLT = 50;
+    const closeFunctionsLT = computeFunctions(closeData, windowSizeLT);
+    const volumeFunctionsLT = computeFunctions(volumeData, windowSizeST); // Volume small window size always
 
-    // Close chart
-    let closeDatasets = [];
-    closeDatasets.push({
-        label: "Close",
-        data: closeData,
-        borderWidth: 1
-    });
-    closeDatasets.push({
-        label: "Close smooth",
-        data: closeDataSmooth,
-        borderWidth: 1
-    });
-    
-    chart('Close', dates, closeDatasets, "Close Analysis");
+    // Long term
+    longTerm(dates, closeData, volumeData, closeFunctionsLT, volumeFunctionsLT, "LT");
 
-    // Volume chart
-    let volumeDatasets = [];
-    volumeDatasets.push({
-        label: "Volume",
-        data: volumeData,
-        borderWidth: 1
-    });
-    volumeDatasets.push({
-        label: "Volume smooth",
-        data: volumeDataSmooth,
-        borderWidth: 1
-    });
-    
-    chart('Volume', dates, volumeDatasets, "Volume Analysis");
+    // Medium term
+    mediumTerm(dates, closeData, volumeData, closeFunctionsMT, volumeFunctionsMT, "MT");
 
-    // Close Derivative (trend) chart
-    let closeDerivativeDatasets = [];
-
-    closeDerivativeDatasets.push({
-        label: "Close (smooth) time derivative = trend",
-        data: closeTimeDerivative,
-        borderWidth: 1
-    });
-
-    closeDerivativeDatasets.push({
-        label: "Close (smooth) time second derivative",
-        data: closeTimeSecondDerivative,
-        borderWidth: 1
-    });
-    
-    chart('DerivativeClose', dates, closeDerivativeDatasets);
-
-    // Volume Derivative chart
-    let volumeDerivativeDatasets = [];
-
-    volumeDerivativeDatasets.push({
-        label: "Volume (smooth) time derivative",
-        data: volumeTimeDerivative,
-        borderWidth: 1
-    });
-
-    volumeDerivativeDatasets.push({
-        label: "Volume (smooth) time second derivative",
-        data: volumeTimeSecondDerivative,
-        borderWidth: 1
-    });
-    
-    chart('DerivativeVolume', dates, volumeDerivativeDatasets);
-
-    // Decision tree
-    let decision = solveDecisionTree(
-        closeTimeDerivative[closeTimeDerivative.length - 1], 
-        volumeTimeDerivative[volumeTimeDerivative.length - 1]
-    );
-
-    document.getElementById(`decision${decision}`).classList.add('table-primary');
+    // Short term
+    shortTerm(dates, closeData, volumeData, closeFunctionsST, volumeFunctionsST, "ST");
 }

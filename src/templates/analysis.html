@@ -89,8 +89,6 @@
 			</div>
 
 			<!-- Analytics -->
-			<h2 class="mb-3" style="padding: 25px 15px 0;">Short term trading (1-10 days) - potentially unsafe</h2>
-
 			<div id="table-container" class="container-fluid">
 				<table class="table">
 					<thead>
@@ -109,14 +107,16 @@
 				  </table>
 			</div>
 
+			<h2 class="mb-3" style="padding: 25px 15px 0;">Short term trading (1-10 days) - potentially unsafe</h2>
+
 			<div id="close-volume-analysis-container" class="container-fluid">
 				<div class="row">
-					<div class="col"><canvas id="chartClose"></canvas></div>
-					<div class="col"><canvas id="chartVolume"></canvas></div>
+					<div class="col"><canvas id="chartCloseST"></canvas></div>
+					<div class="col"><canvas id="chartVolumeST"></canvas></div>
 				</div>
 				<div class="row">
-					<div class="col"><canvas id="chartDerivativeClose"></canvas></div>
-					<div class="col"><canvas id="chartDerivativeVolume"></canvas></div>
+					<div class="col"><canvas id="chartDerivativeCloseST"></canvas></div>
+					<div class="col"><canvas id="chartDerivativeVolumeST"></canvas></div>
 				</div>
 			</div>
 
@@ -175,7 +175,35 @@
 			
 			<h2 class="mb-3" style="padding: 25px 15px 0;">Medium term trading (1-5 months) - unsafe</h2>
 
+			<div id="close-volume-analysis-container" class="container-fluid">
+				<div class="row">
+					<div class="col"><canvas id="chartCloseMT"></canvas></div>
+					<div class="col"><canvas id="chartVolumeMT"></canvas></div>
+				</div>
+				<div class="row">
+					<div class="col"><canvas id="chartDerivativeCloseMT"></canvas></div>
+					<div class="col"><canvas id="chartDerivativeVolumeMT"></canvas></div>
+				</div>
+			</div>
+
 			<h2 class="mb-3" style="padding: 25px 15px 0;">Long term trading (1-5 years) - safe</h2>
+
+			<div id="close-volume-analysis-container" class="container-fluid">
+				<div class="row">
+					<div class="col"><canvas id="chartCloseLT"></canvas></div>
+					<div class="col"><canvas id="chartVolumeLT"></canvas></div>
+				</div>
+				<div class="row">
+					<div class="col"><canvas id="chartDerivativeCloseLT"></canvas></div>
+					<div class="col"><canvas id="chartDerivativeVolumeLT"></canvas></div>
+				</div>
+				<div class="row">
+					<div class="col"><canvas id="chartLinearRegressionLT"></canvas></div>
+					<div class="col">
+						empty
+					</div>
+				</div>
+			</div>
 		</div>
 	</main>
 
@@ -187,7 +215,7 @@
 		let ticker = getQueryVariable('ticker');
 		let tickers = [ticker];
 
-		getData(tickers, 365).then(data => {
+		getData(tickers, 365 * 2).then(data => {
 
 			// Generate charts
 			console.log(data);
