@@ -119,7 +119,7 @@ getStocks(user["token"]).then(stocks => {
 		let count = currentStock['COUNT'];
 
 		// Create a new list item
-		const list = document.getElementById("user-stocks");
+		let list = document.getElementById("user-stocks");
 		createLi(list, ticker, count);
 	}
 }).catch(error => {
@@ -151,7 +151,7 @@ document.getElementById('add-btn').addEventListener('click', function() {
 	const tickersSelect = document.getElementById('tickers');
 
 	// Manual
-	const inputText = document.getElementById('input-ticker').value;
+	let inputText = document.getElementById('input-ticker').value;
 	if(inputText.length > 0) {
 
 		const ticker = inputText

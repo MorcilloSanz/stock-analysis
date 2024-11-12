@@ -234,20 +234,27 @@ function longTerm(dates, closeData, volumeData, closeFunctions, volumeFunctions)
     const x = Array.from({ length: n }, (_, i) => i);
     const y = closeFunctions[0];
 
-    const line = linearRegression(x, y);
-    console.log(line);
-
     //y = mx + b
+    const line = linearRegression(x, y);
     const lineData = [line[1], (n - 1) * line[0] + line[1]];
     const lineDates = [dates[0], dates[n - 1]];
+
+    let pPrediction = document.getElementById("LT-prediction");
+    if(line[0] > 0) {
+        pPrediction.innerHTML = `<div>y = ${line[0]}x + ${line[1]}</div><div><p>As m > 0 <strong class="text-success">Consider buying</strong></p></div>`;
+    }else if (line[0] < 0) {
+        pPrediction.innerHTML = `<div>y = ${line[0]}x + ${line[1]}</div><div><p>As m < 0 <strong class="text-danger">Consider selling</strong></p></div>`;
+    }else {
+        pPrediction.innerHTML = `<div>y = ${line[0]}x + ${line[1]}</div><div><p>As m = 0 <strong class="text-warning">Hold</strong></p></div>`;
+    }
 
     // Plot
     let lineDatasets = [];
 
     lineDatasets.push({
-        label: "Linear regression",
+        label: "Linear regression (trend)",
         data: lineData,
-        borderWidth: 1
+        borderWidth: 2
     });
     
     chart('LinearRegressionLT', lineDates, lineDatasets, "");
