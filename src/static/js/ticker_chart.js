@@ -243,8 +243,9 @@ function longTerm(dates, closeData, volumeData, closeFunctions, volumeFunctions)
 
     // Plot
     let lineDatasets = [];
+
     lineDatasets.push({
-        label: "Trend",
+        label: "Linear regression",
         data: lineData,
         borderWidth: 1
     });

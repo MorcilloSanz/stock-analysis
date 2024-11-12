@@ -133,38 +133,38 @@
 					</thead>
 					<tbody>
 						<tr id="decision1">
-							<td>Increases</td>
-							<td>Increases</td>
+							<td>Increases  \( (\frac{dp}{dt} > 0) \)</td>
+							<td>Increases  \( (\frac{dv}{dt} > 0) \)</td>
 							<td>Strong trend</td>
 							<td><strong class="text-success">Consider buying</strong></td>
 						</tr>
 						<tr id="decision2">
-							<td>Increases</td>
-							<td>Decreases</td>
+							<td>Increases \( (\frac{dp}{dt} > 0 )\)</td>
+							<td>Decreases \( (\frac{dv}{dt} < 0) \)</td>
 							<td>Weak trend</td>
 							<td><strong class="text-warning">Caution;</strong> consider selling</td>
 						</tr>
 						<tr id="decision3">
-							<td>Decreases</td>
-							<td>Increases</td>
+							<td>Decreases \( (\frac{dp}{dt} < 0 )\)</td>
+							<td>Increases \( (\frac{dv}{dt} > 0) \)</td>
 							<td>Strong downward trend</td>
 							<td><strong class="text-danger">Consider selling</strong></td>
 						</tr>
 						<tr id="decision4">
-							<td>Decreases</td>
-							<td>Decreases</td>
+							<td>Decreases \( (\frac{dp}{dt} < 0 )\)</td>
+							<td>Decreases \( (\frac{dv}{dt} < 0 )\)</td>
 							<td>Weak downward trend</td>
 							<td><strong class="text-warning">Caution;</strong> hold position</td>
 						</tr>
 						<tr id="decision5">
-							<td>Remains the same</td>
-							<td>Increases</td>
+							<td>Remains the same \( (\frac{dp}{dt} = 0 )\)</td>
+							<td>Increases \( (\frac{dv}{dt} > 0 )\)</td>
 							<td>Potential accumulation/distribution</td>
 							<td><strong class="text-success">Consider buying</strong></td>
 						</tr>
 						<tr id="decision6">
-							<td>Remains the same</td>
-							<td>Decreases</td>
+							<td>Remains the same \( (\frac{dp}{dt} = 0 )\)</td>
+							<td>Decreases \( (\frac{dv}{dt} < 0 )\)</td>
 							<td>Weak trend</td>
 							<td><strong class="text-warning">Caution;</strong> consider selling</td>
 						</tr>
@@ -199,8 +199,24 @@
 				</div>
 				<div class="row">
 					<div class="col"><canvas id="chartLinearRegressionLT"></canvas></div>
-					<div class="col">
-						empty
+					<div class="col container mb-3">
+						<div class="container" style="padding: 30px 15px 0;">
+
+							<p class="fs-5 badge text-bg-primary text-wrap" style="padding: 10px;">Linear regression</p>
+							<p>In statistics, linear regression is a model that estimates the linear relationship between a scalar response (dependent variable) and one or more explanatory variables (regressor or independent variable).</p>
+
+							\[
+							m = \frac{n \sum xy - \sum x \sum y}{n \sum x^2 - (\sum x)^2}
+							\quad \quad
+							b = \frac{\sum y - m \sum x}{n}
+							\]
+
+							\[
+							y = mx + b \quad \quad \frac{dy}{dx} = m
+							\]
+
+
+						</div>
 					</div>
 				</div>
 			</div>
