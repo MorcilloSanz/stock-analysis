@@ -41,14 +41,19 @@ function createLi(list, ticker, count) {
 		if(diff < 0) arrow = "&#9660;";
 
 		div.innerHTML = `
-		<div style="display: flex; justify-content: space-between; align-items: center;">
-			<div>
+		<div class="card mb-3">
+			<div class="card-header">
 				<h3 class="mb-3" style="display: inline; padding-bottom: 10px;">${ticker}</h3>
 				<p class="mb-3" style="display: inline; margin-left: 3px; color: ${color}; font-weight: bold;">${arrow} ${Number(diff).toFixed(2)}</p>
-				<p id="p-info-${ticker}" class="mb-3 text-body-secondary"><strong>Count:</strong> ${count} <strong>Money:</strong> ${Number(money).toFixed(2)}€</p>
 			</div>
-			<div id="buttonsContainer-${ticker}" style="display: flex; gap: 10px;"></div>
-		</div>`;
+			<div class="card-body">
+				<h5 class="card-title">Special title treatment</h5>
+				<p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+				<p id="p-info-${ticker}" class="mb-3 text-body-secondary"><strong>Count:</strong> ${count} <strong>Money:</strong> ${Number(money).toFixed(2)}€</p>
+				<div id="buttonsContainer-${ticker}" style="display: flex; gap: 10px;"></div>
+			</div>
+		</div>
+		`;
 
 		// Buttons
 		const divButtons = document.getElementById(`buttonsContainer-${ticker}`);
