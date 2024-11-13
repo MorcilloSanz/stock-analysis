@@ -12,6 +12,9 @@
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
 
+	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
+
 	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
 
 	<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
@@ -80,31 +83,59 @@
 
 		<div class="container" style="padding: 100px 15px 0;">
 
-			<!-- Stocks list -->
-			<ul id="user-stocks" class="card border-0"></ul>
+			<div class="row">
+				
+				<div class="col">
+					<!-- Stocks list -->
+					<ul id="user-stocks" class="card border-0"></ul>
 
-			<!-- button add -->
-			<div class="d-flex justify-content-center">
-				<button id="btn-add-tickers" class="btn btn-outline-secondary bi-plus" data-bs-toggle="modal" data-bs-target="#exampleModal"></button>
-			</div>
-
-			<!-- Modal -->
-			<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-				<div class="modal-dialog modal-dialog-centered">
-				  <div class="modal-content">
-					<div class="modal-header">
-					  <h1 class="modal-title fs-5" id="exampleModalLabel">Add tickers</h1>
-					  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					<!-- button add -->
+					<div class="d-flex justify-content-center mb-3">
+						<button id="btn-add-tickers" class="btn btn-outline-secondary bi-plus" data-bs-toggle="modal" data-bs-target="#exampleModal"></button>
 					</div>
-					<div class="modal-body">
-						<select id="tickers" class="form-select mb-4" multiple></select>
-						<div class="d-flex align-items-center mb-4">
-							<button id="add-btn" type="button" class="btn btn-primary me-2">Add</button>
-							<input id="input-ticker" class="form-control" type="text" placeholder="Add ticker manually">
+
+					<!-- Modal -->
+					<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+						<div class="modal-dialog modal-dialog-centered">
+						<div class="modal-content">
+							<div class="modal-header">
+							<h1 class="modal-title fs-5" id="exampleModalLabel">Add tickers</h1>
+							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+							</div>
+							<div class="modal-body">
+								<select id="tickers" class="form-select mb-4" multiple></select>
+								<div class="d-flex align-items-center mb-4">
+									<button id="add-btn" type="button" class="btn btn-primary me-2">Add</button>
+									<input id="input-ticker" class="form-control" type="text" placeholder="Add ticker manually">
+								</div>
+							</div>
+						</div>
 						</div>
 					</div>
-				  </div>
 				</div>
+
+				<div class="col">
+
+					<div class="card mb-3">
+						<div class="card-header">
+							<h3 class="mb-3" style="display: inline; padding-bottom: 10px;">Money</h3>
+						</div>
+						<div class="card-body">
+							<canvas id="chartMoney" style="height: 200px;"></canvas>
+						</div>
+					</div>
+
+					<div class="card mb-3">
+						<div class="card-header">
+							<h3 class="mb-3" style="display: inline; padding-bottom: 10px;">Stocks</h3>
+						</div>
+						<div class="card-body">
+							<canvas id="chartStocks" style="height: 200px;"></canvas>
+						</div>
+					</div>
+
+				</div>
+
 			</div>
 
 		</div>
@@ -120,6 +151,102 @@
 			console.log(sessionStorage.getItem('user'))
 			window.location.replace("{{ url_for('index') }}");
 		});
+
+		// Charts
+		let chartStocks = null;
+
+		getStocks(user["token"]).then(stocks => {
+
+			let tickers = new Array(stocks.length).fill(1);
+			let moneys = new Array(stocks.length).fill(1);
+			let counts = new Array(stocks.length).fill(1);
+
+			// Chart money
+			let moneyDatasets = [];
+			moneyDatasets.push({
+				label: "Money",
+				data: moneys
+			});
+
+			let chartMoney = new Chart(document.getElementById('chartMoney').getContext('2d'), {
+				type: 'pie',
+				data: {
+					labels: tickers,
+					datasets: moneyDatasets
+				},
+				options: {
+					responsive: true,
+					maintainAspectRatio: false, 
+					plugins: {
+						legend: {
+							display: true,
+						},
+						title: {
+							display: false
+						}
+					}
+				}
+			});
+
+			for(let i = 0; i < stocks.length; i ++) {
+
+				let currentStock = stocks[i];
+				let ticker = currentStock['TICKER'];
+				let count = currentStock['COUNT'];
+
+				tickers[i] = ticker;
+				counts[i] = count;
+
+				getData([ticker], 2).then(data => {
+					let pair = `('${ticker}', 'Close')`;
+
+					let price = 0;
+					for(let key in data[pair])
+						price = data[pair][key];
+
+					const money = price * count;
+					moneys[i] = money;
+
+					// Update chart
+					chartMoney.data.datasets[0].data = moneys;
+					chartMoney.update();
+
+				}).catch(error => {
+					console.error('Error fetching data:', error);
+				});
+			}
+
+			// Chart stocks
+			let stockDatasets = [];
+			stockDatasets.push({
+				label: "Stocks",
+				data: counts
+			});
+			
+			chartStocks = new Chart(document.getElementById('chartStocks').getContext('2d'), {
+				type: 'pie',
+				data: {
+					labels: tickers,
+					datasets: stockDatasets
+				},
+				options: {
+					responsive: true,
+					maintainAspectRatio: false, 
+					plugins: {
+						legend: {
+							display: true,
+						},
+						title: {
+							display: false
+						}
+					}
+				}
+			});
+
+		}).catch(error => {
+			console.error('Error fetching tickers:', error);
+		});
+
 
 	</script>
 
