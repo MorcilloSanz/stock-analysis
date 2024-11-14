@@ -25,7 +25,7 @@ function chart(j, dates, _datasets, titleText="") {
                     display: true
                 },
                 title: {
-                    display: titleText.length == 0 ? false : true,
+                    display: true,
                     text: titleText.length == 0 ? vars[j] : titleText
                 }
             },
@@ -281,17 +281,29 @@ function loadEntries(data, selectedTickers) {
 
         let pair = "('" + ticker + "', '" + vars[j] + "')";
 
-        let lastEntry = null;
-        for(const key in data[pair])
-            lastEntry = data[pair][key];
+        let keys = Object.keys(data[pair]);
+        let lastEntry = data[pair][keys[keys.length - 1]];
 
-        html += `<td>${Number(lastEntry).toFixed(2)}</td>`
+        let diff = lastEntry - data[pair][keys[keys.length - 2]];
+
+		let color = 'lightgreen';
+		if(diff < 0) color = 'red';
+
+		let arrow = "&#9650;";
+		if(diff < 0) arrow = "&#9660;";
+
+        html += `
+        <td>
+            <strong class="mb-3" style="display: inline; padding-bottom: 10px;">${Number(lastEntry).toFixed(2)}</strong>
+            <p class="mb-3" style="display: inline; margin-left: 3px; color: ${color}; font-weight: bold;">${arrow} ${Number(diff).toFixed(2)}</p>
+        </td>
+        `
     }
 
     const today = new Date();
     const formattedDate = today.toISOString().split('T')[0];
 
-    html += `<td>${formattedDate}</td><tr>`;
+    html += `<td><strong>${formattedDate}</strong></td><tr>`;
     tbody.innerHTML = html;
 
     // Analysis charts

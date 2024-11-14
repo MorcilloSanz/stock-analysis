@@ -14,23 +14,17 @@ function createLi(list, ticker, count) {
 	list.appendChild(li);
 
 	// Compute money
-	getData([ticker], 2).then(data => {
+	getData([ticker], 3).then(data => {
 
 		let pair = `('${ticker}', 'Close')`;
 
-		let previousPrice = 0;
-		let price = 0;
-
-		let index = 0;
-		for(let key in data[pair]) {
-
-			price = data[pair][key];
-			if(index == 0)
-				previousPrice = price;
-
-			index ++;
+		let price = previousPrice = 0;
+		if(data[pair]) {
+			let keys = Object.keys(data[pair]);
+			price = data[pair][keys[keys.length - 1]];
+			previousPrice = data[pair][keys[keys.length - 2]];
 		}
-		
+
 		let money = price * count;
 		let diff = price - previousPrice;
 
