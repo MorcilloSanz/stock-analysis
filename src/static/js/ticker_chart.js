@@ -22,9 +22,10 @@ function chart(j, dates, _datasets, titleText="") {
             plugins: {
                 legend: {
                     position: 'top',
+                    display: true
                 },
                 title: {
-                    display: true,
+                    display: titleText.length == 0 ? false : true,
                     text: titleText.length == 0 ? vars[j] : titleText
                 }
             },
@@ -149,13 +150,13 @@ function baseAnalysisCharts(dates, closeData, volumeData, closeFunctions, volume
     let closeDerivativeDatasets = [];
 
     closeDerivativeDatasets.push({
-        label: "Close (smooth) time derivative = trend",
+        label: "Close derivative",
         data: closeFunctions[1],
         borderWidth: 1
     });
 
     closeDerivativeDatasets.push({
-        label: "Close (smooth) time second derivative",
+        label: "Close second derivative",
         data: closeFunctions[2],
         borderWidth: 1
     });
@@ -166,13 +167,13 @@ function baseAnalysisCharts(dates, closeData, volumeData, closeFunctions, volume
     let volumeDerivativeDatasets = [];
 
     volumeDerivativeDatasets.push({
-        label: "Volume (smooth) time derivative",
+        label: "Volume derivative",
         data: volumeFunctions[1],
         borderWidth: 1
     });
 
     volumeDerivativeDatasets.push({
-        label: "Volume (smooth) time second derivative",
+        label: "Volume second derivative",
         data: volumeFunctions[2],
         borderWidth: 1
     });
@@ -284,7 +285,7 @@ function loadEntries(data, selectedTickers) {
         for(const key in data[pair])
             lastEntry = data[pair][key];
 
-        html += `<td>${lastEntry}</td>`
+        html += `<td>${Number(lastEntry).toFixed(2)}</td>`
     }
 
     const today = new Date();

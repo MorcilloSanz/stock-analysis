@@ -68,159 +68,179 @@
 		</nav>
 	</header>
 
-	<main class="flex-shrink-0">
+	<main class="flex-shrink-0" style="padding: 90px 15px 0;">
 
-		<div id="analytics-container">
-
-			<!-- Charts -->
-			<div id="charts-container" class="container-fluid">
-				<div class="row">
-					<div class="col"><canvas id="chart0"></canvas></div>
-					<div class="col"><canvas id="chart1"></canvas></div>
+		<div class="container-xl">
+			<div class="card mb-3">
+				<div class="card-header">
+				  <h4>Overall info</h4>
 				</div>
-				<div class="row">
-					<div class="col"><canvas id="chart2"></canvas></div>
-					<div class="col"><canvas id="chart3"></canvas></div>
-				</div>
-				<div class="row">
-					<div class="col"><canvas id="chart4"></canvas></div>
-					<div class="col"><canvas id="chart5"></canvas></div>
-				</div>
-			</div>
-
-			<!-- Analytics -->
-			<div id="table-container" class="container-fluid">
-				<table class="table">
-					<thead>
-					  <tr class="table-dark">
-						<th scope="col">Ticker</th>
-						<th scope="col">Open</th>
-						<th scope="col">High</th>
-						<th scope="col">Low</th>
-						<th scope="col">Close</th>
-						<th scope="col">Adj Close</th>
-						<th scope="col">Volume</th>
-						<th scope="col">Date</th>
-					  </tr>
-					</thead>
-					<tbody id="stock-entries"></tbody>
-				  </table>
-			</div>
-
-			<h2 class="mb-3" style="padding: 25px 15px 0;">Short term trading (1-10 days) - potentially unsafe</h2>
-
-			<div id="close-volume-analysis-container" class="container-fluid">
-				<div class="row">
-					<div class="col"><canvas id="chartCloseST"></canvas></div>
-					<div class="col"><canvas id="chartVolumeST"></canvas></div>
-				</div>
-				<div class="row">
-					<div class="col"><canvas id="chartDerivativeCloseST"></canvas></div>
-					<div class="col"><canvas id="chartDerivativeVolumeST"></canvas></div>
+				<div class="card-body">
+					  <!-- Charts -->
+					<div id="charts-container" class="container-fluid">
+						<div class="row">
+							<div class="col"><canvas id="chart0"></canvas></div>
+							<div class="col"><canvas id="chart1"></canvas></div>
+						</div>
+						<div class="row">
+							<div class="col"><canvas id="chart2"></canvas></div>
+							<div class="col"><canvas id="chart3"></canvas></div>
+						</div>
+						<div class="row">
+							<div class="col"><canvas id="chart4"></canvas></div>
+							<div class="col"><canvas id="chart5"></canvas></div>
+						</div>
+					</div>
+	
+					<!-- Analytics -->
+					<div id="table-container" class="container-fluid">
+						<table class="table">
+							<thead>
+							<tr class="table-dark">
+								<th scope="col">Ticker</th>
+								<th scope="col">Open</th>
+								<th scope="col">High</th>
+								<th scope="col">Low</th>
+								<th scope="col">Close</th>
+								<th scope="col">Adj Close</th>
+								<th scope="col">Volume</th>
+								<th scope="col">Date</th>
+							</tr>
+							</thead>
+							<tbody id="stock-entries"></tbody>
+						</table>
+					</div>
 				</div>
 			</div>
-
-			<div id="decision-container" class="container-fluid">
-
-				<table class="table">
-					<thead>
-						<tr class="table-dark">
-							<th>Price</th>
-							<th>Volume</th>
-							<th>Interpretation</th>
-							<th>Action</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr id="decision1">
-							<td>Increases  \( (\frac{dp}{dt} > 0) \)</td>
-							<td>Increases  \( (\frac{dv}{dt} > 0) \)</td>
-							<td>Strong trend</td>
-							<td><strong class="text-success">Consider buying</strong></td>
-						</tr>
-						<tr id="decision2">
-							<td>Increases \( (\frac{dp}{dt} > 0 )\)</td>
-							<td>Decreases \( (\frac{dv}{dt} < 0) \)</td>
-							<td>Weak trend</td>
-							<td><strong class="text-warning">Caution;</strong> consider selling</td>
-						</tr>
-						<tr id="decision3">
-							<td>Decreases \( (\frac{dp}{dt} < 0 )\)</td>
-							<td>Increases \( (\frac{dv}{dt} > 0) \)</td>
-							<td>Strong downward trend</td>
-							<td><strong class="text-danger">Consider selling</strong></td>
-						</tr>
-						<tr id="decision4">
-							<td>Decreases \( (\frac{dp}{dt} < 0 )\)</td>
-							<td>Decreases \( (\frac{dv}{dt} < 0 )\)</td>
-							<td>Weak downward trend</td>
-							<td><strong class="text-warning">Caution;</strong> hold position</td>
-						</tr>
-						<tr id="decision5">
-							<td>Remains the same \( (\frac{dp}{dt} = 0 )\)</td>
-							<td>Increases \( (\frac{dv}{dt} > 0 )\)</td>
-							<td>Potential accumulation/distribution</td>
-							<td><strong class="text-success">Consider buying</strong></td>
-						</tr>
-						<tr id="decision6">
-							<td>Remains the same \( (\frac{dp}{dt} = 0 )\)</td>
-							<td>Decreases \( (\frac{dv}{dt} < 0 )\)</td>
-							<td>Weak trend</td>
-							<td><strong class="text-warning">Caution;</strong> consider selling</td>
-						</tr>
-					</tbody>
-				</table>
-
+	
+			<div class="card mb-3">
+				<div class="card-header">
+				  <h4>Short term trading (1-10 days) - potentially unsafe</h4>
+				</div>
+				<div class="card-body">
+					<div id="close-volume-analysis-container" class="container-fluid">
+						<div class="row">
+							<div class="col"><canvas id="chartCloseST"></canvas></div>
+							<div class="col"><canvas id="chartVolumeST"></canvas></div>
+						</div>
+						<div class="row">
+							<div class="col"><canvas id="chartDerivativeCloseST"></canvas></div>
+							<div class="col"><canvas id="chartDerivativeVolumeST"></canvas></div>
+						</div>
+					</div>
+		
+					<div id="decision-container" class="container-fluid">
+						<table class="table">
+							<thead>
+								<tr class="table-dark">
+									<th>Price</th>
+									<th>Volume</th>
+									<th>Interpretation</th>
+									<th>Action</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr id="decision1">
+									<td>Increases  \( (\frac{dp}{dt} > 0) \)</td>
+									<td>Increases  \( (\frac{dv}{dt} > 0) \)</td>
+									<td>Strong trend</td>
+									<td><strong class="text-success">Consider buying</strong></td>
+								</tr>
+								<tr id="decision2">
+									<td>Increases \( (\frac{dp}{dt} > 0 )\)</td>
+									<td>Decreases \( (\frac{dv}{dt} < 0) \)</td>
+									<td>Weak trend</td>
+									<td><strong class="text-warning">Caution;</strong> consider selling</td>
+								</tr>
+								<tr id="decision3">
+									<td>Decreases \( (\frac{dp}{dt} < 0 )\)</td>
+									<td>Increases \( (\frac{dv}{dt} > 0) \)</td>
+									<td>Strong downward trend</td>
+									<td><strong class="text-danger">Consider selling</strong></td>
+								</tr>
+								<tr id="decision4">
+									<td>Decreases \( (\frac{dp}{dt} < 0 )\)</td>
+									<td>Decreases \( (\frac{dv}{dt} < 0 )\)</td>
+									<td>Weak downward trend</td>
+									<td><strong class="text-warning">Caution;</strong> hold position</td>
+								</tr>
+								<tr id="decision5">
+									<td>Remains the same \( (\frac{dp}{dt} = 0 )\)</td>
+									<td>Increases \( (\frac{dv}{dt} > 0 )\)</td>
+									<td>Potential accumulation/distribution</td>
+									<td><strong class="text-success">Consider buying</strong></td>
+								</tr>
+								<tr id="decision6">
+									<td>Remains the same \( (\frac{dp}{dt} = 0 )\)</td>
+									<td>Decreases \( (\frac{dv}{dt} < 0 )\)</td>
+									<td>Weak trend</td>
+									<td><strong class="text-warning">Caution;</strong> consider selling</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
 			</div>
-			
-			<h2 class="mb-3" style="padding: 25px 15px 0;">Medium term trading (1-5 months) - unsafe</h2>
-
-			<div id="close-volume-analysis-container" class="container-fluid">
-				<div class="row">
-					<div class="col"><canvas id="chartCloseMT"></canvas></div>
-					<div class="col"><canvas id="chartVolumeMT"></canvas></div>
+	
+			<div class="card mb-3">
+				<div class="card-header">
+				  <h4>Medium term trading (1-5 months) - unsafe</h4>
 				</div>
-				<div class="row">
-					<div class="col"><canvas id="chartDerivativeCloseMT"></canvas></div>
-					<div class="col"><canvas id="chartDerivativeVolumeMT"></canvas></div>
+				<div class="card-body">
+					<div id="close-volume-analysis-container" class="container-fluid">
+						<div class="row">
+							<div class="col"><canvas id="chartCloseMT"></canvas></div>
+							<div class="col"><canvas id="chartVolumeMT"></canvas></div>
+						</div>
+						<div class="row">
+							<div class="col"><canvas id="chartDerivativeCloseMT"></canvas></div>
+							<div class="col"><canvas id="chartDerivativeVolumeMT"></canvas></div>
+						</div>
+					</div>
 				</div>
 			</div>
-
-			<h2 class="mb-3" style="padding: 25px 15px 0;">Long term trading (1-5 years) - safe</h2>
-
-			<div id="close-volume-analysis-container" class="container-fluid">
-				<div class="row">
-					<div class="col"><canvas id="chartCloseLT"></canvas></div>
-					<div class="col"><canvas id="chartVolumeLT"></canvas></div>
+	
+			<div class="card mb-3">
+				<div class="card-header">
+				  <h4>Long term trading (1-5 years) - safe</h4>
 				</div>
-				<div class="row">
-					<div class="col"><canvas id="chartDerivativeCloseLT"></canvas></div>
-					<div class="col"><canvas id="chartDerivativeVolumeLT"></canvas></div>
-				</div>
-				<div class="row">
-					<div class="col"><canvas id="chartLinearRegressionLT"></canvas></div>
-					<div class="col container mb-3">
-						<div class="container" style="padding: 30px 15px 0;">
-
-							<p class="fs-5 badge text-bg-dark text-wrap" style="padding: 10px;">Linear regression</p>
-							<p>In statistics, linear regression is a model that estimates the linear relationship between a scalar response (dependent variable) and one or more explanatory variables (regressor or independent variable).</p>
-
-							\[
-							m = \frac{n \sum xy - \sum x \sum y}{n \sum x^2 - (\sum x)^2}
-							\quad \quad
-							b = \frac{\sum y - m \sum x}{n}
-							\]
-
-							\[
-							y = mx + b \quad \quad \frac{dy}{dx} = m
-							\]
-
-							<div id="LT-prediction"></div>
+				<div class="card-body">
+					<div id="close-volume-analysis-container" class="container-fluid">
+						<div class="row">
+							<div class="col"><canvas id="chartCloseLT"></canvas></div>
+							<div class="col"><canvas id="chartVolumeLT"></canvas></div>
+						</div>
+						<div class="row">
+							<div class="col"><canvas id="chartDerivativeCloseLT"></canvas></div>
+							<div class="col"><canvas id="chartDerivativeVolumeLT"></canvas></div>
+						</div>
+						<div class="row">
+							<div class="col"><canvas id="chartLinearRegressionLT"></canvas></div>
+							<div class="col container mb-3">
+								<div class="container" style="padding: 30px 15px 0;">
+		
+									<p class="fs-5 badge text-bg-dark text-wrap" style="padding: 10px;">Linear regression</p>
+									<p>In statistics, linear regression is a model that estimates the linear relationship between a scalar response (dependent variable) and one or more explanatory variables (regressor or independent variable).</p>
+		
+									\[
+									m = \frac{n \sum xy - \sum x \sum y}{n \sum x^2 - (\sum x)^2}
+									\quad \quad
+									b = \frac{\sum y - m \sum x}{n}
+									\]
+		
+									\[
+									y = mx + b \quad \quad \frac{dy}{dx} = m
+									\]
+		
+									<div id="LT-prediction"></div>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
+
 	</main>
 
 	<script>
