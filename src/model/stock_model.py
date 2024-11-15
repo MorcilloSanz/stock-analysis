@@ -39,6 +39,20 @@ class StockModel(AuthModel):
 		companies_data.index = companies_data.index.strftime('%Y-%m-%d')
 
 		return companies_data
+	
+
+	def ticker_info(self, ticker_symbol: str):
+		"""
+		Retrieves information of a company.
+
+		Args:
+			ticker_symbol (str): the ticker symbol.
+
+		Returns:
+			A dictionary with the information. 
+		"""
+		ticker = yf.Ticker(ticker_symbol)
+		return ticker.info
 
 
 	def add_stocks(self, ticker: str, count: float, token: str) -> None:

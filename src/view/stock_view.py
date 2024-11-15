@@ -53,6 +53,27 @@ def stock_data():
 	return response
 
 
+@stock.route('/ticker_info', methods=('GET', 'POST'))
+def ticker_info():
+	"""
+    Retrieves information of a company in JSON format.
+    Uses yfinance to download data for the specified company.
+
+    Returns:
+        Response: A JSON response containing the company information.
+
+	Params:
+		?ticker=AAPL
+    """
+	ticker: str = request.args.get('ticker')
+
+	stock_controller: StockController = StockController()
+	info = stock_controller.ticker_info(ticker_symbol=ticker)
+
+	response = make_response(info)
+	return response
+
+
 @stock.route('/stocks', methods=('GET', 'POST'))
 def stocks():
 	"""

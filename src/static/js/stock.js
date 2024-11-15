@@ -81,6 +81,32 @@ async function getData(tickers, days) {
 	}
 }
 
+async function getTickerInfo(ticker) {
+
+	const requestOptions = {
+		method: "GET",
+		redirect: "follow"
+	};
+
+	const params = new URLSearchParams({ 
+		ticker: ticker
+	});
+
+	try {
+
+		const response = await fetch(`${URL_BASE}${END_POINT_TICKER_INFO}?${params}`, requestOptions);
+		if (!response.ok) {
+			throw new Error("Network response was not ok " + response.statusText);
+		}
+
+		const result = await response.json();
+		return result;
+
+	} catch (error) {
+		return error;
+	}
+}
+
 /**
  * Fetches the stock holdings of a user.
  * 

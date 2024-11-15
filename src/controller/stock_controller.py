@@ -41,6 +41,19 @@ class StockController(DatabaseController):
 
 		return self.model.companies_data(companies_tickers, start_date, end_date)
 
+	
+	def ticker_info(self, ticker_symbol: str):
+		"""
+		Retrieves information of a company.
+
+		Args:
+			ticker_symbol (str): the ticker symbol.
+
+		Returns:
+			A dictionary with the information. 
+		"""
+		return self.model.ticker_info(ticker_symbol)
+
 
 	def add_stocks(self, ticker: str, count: float, token: str) -> None:
 		"""
