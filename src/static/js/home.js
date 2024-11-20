@@ -107,7 +107,6 @@ getStocks(user["token"]).then(stocks => {
 		let list = document.getElementById("user-stocks");
 
 		getTickerInfo(ticker).then(info => {
-			console.log(info);
 			createLi(list, ticker, count, info);
 		}).catch(error => {
 			console.error('Error fecthing ticker:', error);

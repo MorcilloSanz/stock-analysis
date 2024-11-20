@@ -240,13 +240,16 @@ function longTerm(dates, closeData, volumeData, closeFunctions, volumeFunctions)
     const lineData = [line[1], (n - 1) * line[0] + line[1]];
     const lineDates = [dates[0], dates[n - 1]];
 
+    const m = Number(line[0]).toFixed(2);
+    const b = Number(line[1]).toFixed(2);
+
     let pPrediction = document.getElementById("LT-prediction");
-    if(line[0] > 0) {
-        pPrediction.innerHTML = `<div>y = ${line[0]}x + ${line[1]}</div><div><p>As m > 0 <strong class="text-success">Consider buying</strong></p></div>`;
-    }else if (line[0] < 0) {
-        pPrediction.innerHTML = `<div>y = ${line[0]}x + ${line[1]}</div><div><p>As m < 0 <strong class="text-danger">Consider selling</strong></p></div>`;
+    if(m > 0) {
+        pPrediction.innerHTML = `<div>y = ${m}x + ${b}</div><div><strong><p>As m > 0:</strong> <strong class="text-success">consider buying</strong></p></div>`;
+    }else if (m < 0) {
+        pPrediction.innerHTML = `<div>y = ${m}x + ${b}</div><div><strong><p>As m < 0:</strong> <strong class="text-danger">consider selling</strong></p></div>`;
     }else {
-        pPrediction.innerHTML = `<div>y = ${line[0]}x + ${line[1]}</div><div><p>As m = 0 <strong class="text-warning">Hold</strong></p></div>`;
+        pPrediction.innerHTML = `<div>y = ${m}x + ${b}</div><div><strong><p>As m = 0:</strong> <strong class="text-warning">hold</strong></p></div>`;
     }
 
     // Plot
