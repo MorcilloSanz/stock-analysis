@@ -11,6 +11,7 @@
 	<script src="{{ url_for('static', filename='js/endpoint.js') }}"></script>
 	<script src="{{ url_for('static', filename='js/stock.js') }}"></script>
 	<script src="{{ url_for('static', filename='js/analysis.js') }}"></script>
+	<script src="{{ url_for('static', filename='js/RNN.js') }}"></script>
 	<script src="{{ url_for('static', filename='js/ticker_chart.js') }}"></script>
 	<script src="{{ url_for('static', filename='js/get.js') }}"></script>
 
@@ -18,6 +19,7 @@
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-AMS_HTML"></script>
+	<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script>
 
 	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
 
@@ -113,136 +115,159 @@
 				</div>
 			</div>
 	
-			<div class="card mb-3">
-				<div class="card-header">
-				  <h4>Short term trading (1-10 days) - potentially unsafe</h4>
-				</div>
-				<div class="card-body">
-					<div id="close-volume-analysis-container" class="container-fluid">
+			<div class="accordion mb-3" id="accordionShortTerm">
+				<div class="accordion-item">
+				  <h2 class="accordion-header" id="headingShortTerm">
+					<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseShortTerm" aria-expanded="false" aria-controls="collapseShortTerm">
+					  <h4>Short term trading (1-10 days) - potentially unsafe</h4>
+					</button>
+				  </h2>
+				  <div id="collapseShortTerm" class="accordion-collapse collapse" aria-labelledby="headingShortTerm" data-bs-parent="#accordionShortTerm">
+					<div class="accordion-body">
+					  <div id="close-volume-analysis-container-short-term" class="container-fluid">
 						<div class="row">
-							<div class="col"><canvas id="chartCloseST"></canvas></div>
-							<div class="col"><canvas id="chartVolumeST"></canvas></div>
+						  <div class="col"><canvas id="chartCloseST"></canvas></div>
+						  <div class="col"><canvas id="chartVolumeST"></canvas></div>
 						</div>
 						<div class="row">
-							<div class="col"><canvas id="chartDerivativeCloseST"></canvas></div>
-							<div class="col"><canvas id="chartDerivativeVolumeST"></canvas></div>
+						  <div class="col"><canvas id="chartDerivativeCloseST"></canvas></div>
+						  <div class="col"><canvas id="chartDerivativeVolumeST"></canvas></div>
 						</div>
-					</div>
-		
-					<div id="decision-container" class="container-fluid">
+					  </div>
+			  
+					  <div id="decision-container-short-term" class="container-fluid">
 						<table class="table">
-							<thead>
-								<tr class="table-dark">
-									<th>Price</th>
-									<th>Volume</th>
-									<th>Interpretation</th>
-									<th>Action</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr id="decision1">
-									<td>Increases  \( (\frac{dp}{dt} > 0) \)</td>
-									<td>Increases  \( (\frac{dv}{dt} > 0) \)</td>
-									<td>Strong trend</td>
-									<td><strong class="text-success">Consider buying</strong></td>
-								</tr>
-								<tr id="decision2">
-									<td>Increases \( (\frac{dp}{dt} > 0 )\)</td>
-									<td>Decreases \( (\frac{dv}{dt} < 0) \)</td>
-									<td>Weak trend</td>
-									<td><strong class="text-warning">Caution;</strong> consider selling</td>
-								</tr>
-								<tr id="decision3">
-									<td>Decreases \( (\frac{dp}{dt} < 0 )\)</td>
-									<td>Increases \( (\frac{dv}{dt} > 0) \)</td>
-									<td>Strong downward trend</td>
-									<td><strong class="text-danger">Consider selling</strong></td>
-								</tr>
-								<tr id="decision4">
-									<td>Decreases \( (\frac{dp}{dt} < 0 )\)</td>
-									<td>Decreases \( (\frac{dv}{dt} < 0 )\)</td>
-									<td>Weak downward trend</td>
-									<td><strong class="text-warning">Caution;</strong> hold position</td>
-								</tr>
-								<tr id="decision5">
-									<td>Remains the same \( (\frac{dp}{dt} = 0 )\)</td>
-									<td>Increases \( (\frac{dv}{dt} > 0 )\)</td>
-									<td>Potential accumulation/distribution</td>
-									<td><strong class="text-success">Consider buying</strong></td>
-								</tr>
-								<tr id="decision6">
-									<td>Remains the same \( (\frac{dp}{dt} = 0 )\)</td>
-									<td>Decreases \( (\frac{dv}{dt} < 0 )\)</td>
-									<td>Weak trend</td>
-									<td><strong class="text-warning">Caution;</strong> consider selling</td>
-								</tr>
-							</tbody>
+						  <thead>
+							<tr class="table-dark">
+							  <th>Price</th>
+							  <th>Volume</th>
+							  <th>Interpretation</th>
+							  <th>Action</th>
+							</tr>
+						  </thead>
+						  <tbody>
+							<tr id="decision1">
+							  <td>Increases \( (\frac{dp}{dt} > 0) \)</td>
+							  <td>Increases \( (\frac{dv}{dt} > 0) \)</td>
+							  <td>Strong trend</td>
+							  <td><strong class="text-success">Consider buying</strong></td>
+							</tr>
+							<tr id="decision2">
+							  <td>Increases \( (\frac{dp}{dt} > 0) \)</td>
+							  <td>Decreases \( (\frac{dv}{dt} < 0) \)</td>
+							  <td>Weak trend</td>
+							  <td><strong class="text-warning">Caution;</strong> consider selling</td>
+							</tr>
+							<tr id="decision3">
+							  <td>Decreases \( (\frac{dp}{dt} < 0) \)</td>
+							  <td>Increases \( (\frac{dv}{dt} > 0) \)</td>
+							  <td>Strong downward trend</td>
+							  <td><strong class="text-danger">Consider selling</strong></td>
+							</tr>
+							<tr id="decision4">
+							  <td>Decreases \( (\frac{dp}{dt} < 0) \)</td>
+							  <td>Decreases \( (\frac{dv}{dt} < 0) \)</td>
+							  <td>Weak downward trend</td>
+							  <td><strong class="text-warning">Caution;</strong> hold position</td>
+							</tr>
+							<tr id="decision5">
+							  <td>Remains the same \( (\frac{dp}{dt} = 0) \)</td>
+							  <td>Increases \( (\frac{dv}{dt} > 0) \)</td>
+							  <td>Potential accumulation/distribution</td>
+							  <td><strong class="text-success">Consider buying</strong></td>
+							</tr>
+							<tr id="decision6">
+							  <td>Remains the same \( (\frac{dp}{dt} = 0) \)</td>
+							  <td>Decreases \( (\frac{dv}{dt} < 0) \)</td>
+							  <td>Weak trend</td>
+							  <td><strong class="text-warning">Caution;</strong> consider selling</td>
+							</tr>
+						  </tbody>
 						</table>
+					  </div>
 					</div>
+				  </div>
 				</div>
 			</div>
+			  
 	
-			<div class="card mb-3">
-				<div class="card-header">
-				  <h4>Medium term trading (1-5 months) - unsafe</h4>
-				</div>
-				<div class="card-body">
-					<div id="close-volume-analysis-container" class="container-fluid">
+			<div class="accordion mb-3" id="accordionMediumTerm">
+				<div class="accordion-item">
+				  <h2 class="accordion-header" id="headingMediumTerm">
+					<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseMediumTerm" aria-expanded="false" aria-controls="collapseMediumTerm">
+					  <h4>Medium term trading (1-5 months) - unsafe</h4>
+					</button>
+				  </h2>
+				  <div id="collapseMediumTerm" class="accordion-collapse collapse" aria-labelledby="headingMediumTerm" data-bs-parent="#accordionMediumTerm">
+					<div class="accordion-body">
+					  <div id="close-volume-analysis-container-medium-term" class="container-fluid">
 						<div class="row">
-							<div class="col"><canvas id="chartCloseMT"></canvas></div>
-							<div class="col"><canvas id="chartVolumeMT"></canvas></div>
+						  <div class="col"><canvas id="chartCloseMT"></canvas></div>
+						  <div class="col"><canvas id="chartVolumeMT"></canvas></div>
 						</div>
 						<div class="row">
-							<div class="col"><canvas id="chartDerivativeCloseMT"></canvas></div>
-							<div class="col"><canvas id="chartDerivativeVolumeMT"></canvas></div>
-						</div>
-					</div>
-				</div>
-			</div>
-	
-			<div class="card mb-3">
-				<div class="card-header">
-				  <h4>Long term trading (1-5 years) - safe</h4>
-				</div>
-				<div class="card-body">
-					<div id="close-volume-analysis-container" class="container-fluid">
-						<div class="row">
-							<div class="col"><canvas id="chartCloseLT"></canvas></div>
-							<div class="col"><canvas id="chartVolumeLT"></canvas></div>
+						  <div class="col"><canvas id="chartDerivativeCloseMT"></canvas></div>
+						  <div class="col"><canvas id="chartDerivativeVolumeMT"></canvas></div>
 						</div>
 						<div class="row">
-							<div class="col"><canvas id="chartDerivativeCloseLT"></canvas></div>
-							<div class="col"><canvas id="chartDerivativeVolumeLT"></canvas></div>
-						</div>
-						<div class="row">
-							<div class="col"><canvas id="chartLinearRegressionLT"></canvas></div>
-							<div class="col container mb-3">
-								<div class="container" style="padding: 30px 15px 0;">
-		
-									<p class="fs-6 badge text-bg-dark text-wrap" style="padding: 10px;">Linear regression</p>
-
-									<p>Long trend analysis using Linear Regression</p>
-									
-									\[
-									m = \frac{n \sum xy - \sum x \sum y}{n \sum x^2 - (\sum x)^2}
-									\quad \quad
-									b = \frac{\sum y - m \sum x}{n}
-									\]
-									
-									<p>Thus, the trend is given by \( m\)</p>
-
-									\[
-									y = mx + b \quad \quad \frac{dy}{dx} = m
-									\]
-
-									<p class="fs-6 badge text-bg-dark text-wrap" style="padding: 10px;">Action</p>
-									<div id="LT-prediction"></div>
-								</div>
+							<div class="col">
+								<button id="predict-btn" class="btn btn-primary me-2 mb-3" type="button">Train neural network</button>
+							</div>
+							<div class="col">
+								<div id="training-info"></div>
+								<div id="prediction-results"></div>
 							</div>
 						</div>
+					  </div>
 					</div>
+				  </div>
 				</div>
 			</div>
+
+			<div class="accordion mb-3" id="accordionLongTerm">
+				<div class="accordion-item">
+				  <h2 class="accordion-header" id="headingLongTerm">
+					<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseLongTerm" aria-expanded="false" aria-controls="collapseLongTerm">
+					  <h4>Long term trading (1-5 years) - safe</h4>
+					</button>
+				  </h2>
+				  <div id="collapseLongTerm" class="accordion-collapse collapse" aria-labelledby="headingLongTerm" data-bs-parent="#accordionLongTerm">
+					<div class="accordion-body">
+					  <div id="close-volume-analysis-container-long-term" class="container-fluid">
+						<div class="row">
+						  <div class="col"><canvas id="chartCloseLT"></canvas></div>
+						  <div class="col"><canvas id="chartVolumeLT"></canvas></div>
+						</div>
+						<div class="row" style="display: none;">
+						  <div class="col"><canvas id="chartDerivativeCloseLT"></canvas></div>
+						  <div class="col"><canvas id="chartDerivativeVolumeLT"></canvas></div>
+						</div>
+						<div class="row">
+						  <div class="col"><canvas id="chartLinearRegressionLT"></canvas></div>
+						  <div class="col container mb-3">
+							<div class="container" style="padding: 30px 15px 0;">
+							  <p class="fs-6 badge text-bg-dark text-wrap" style="padding: 10px;">Linear regression</p>
+							  <p>Long trend analysis using Linear Regression</p>
+							  \[
+							  m = \frac{n \sum xy - \sum x \sum y}{n \sum x^2 - (\sum x)^2}
+							  \quad \quad
+							  b = \frac{\sum y - m \sum x}{n}
+							  \]
+							  <p>Thus, the trend is given by \( m\)</p>
+							  \[
+							  y = mx + b \quad \quad \frac{dy}{dx} = m
+							  \]
+							  <p class="fs-6 badge text-bg-dark text-wrap" style="padding: 10px;">Action</p>
+							  <div id="LT-prediction"></div>
+							</div>
+						  </div>
+						</div>
+					  </div>
+					</div>
+				  </div>
+				</div>
+			</div>
+
 		</div>
 
 	</main>

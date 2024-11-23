@@ -216,6 +216,9 @@ function mediumTerm(dates, closeData, volumeData, closeFunctions, volumeFunction
     const lastCloseData = closeData.slice(-lastDays);
     const lastVolumeData = volumeData.slice(-lastDays);
 
+    const totalSmoothCloseData = [...closeFunctions[0]];
+    const totalSmoothVolumeData = [...volumeFunctions[0]];
+
     for(let i = 0; i < closeFunctions.length; i ++) {
         closeFunctions[i] = closeFunctions[i].slice(-lastDays);
         volumeFunctions[i] = volumeFunctions[i].slice(-lastDays);
@@ -224,6 +227,29 @@ function mediumTerm(dates, closeData, volumeData, closeFunctions, volumeFunction
     baseAnalysisCharts(lastDates, lastCloseData, lastVolumeData, closeFunctions, volumeFunctions, "MT");
 
     // Deep Learning approach
+    let predictButton = document.getElementById('predict-btn');
+    predictButton.addEventListener('click', async function() {
+
+        predictButton.disabled = true;
+
+        document.getElementById("training-info").innerHTML = "Training neural network...";
+
+        const timesteps = 4; // We use 4 days in order to predict the next one
+        const epochs = 1000;
+        const batchSize = 8;
+
+        const predictionDays = 10;
+
+        await runRNN(totalSmoothCloseData, totalSmoothVolumeData, timesteps, predictionDays, epochs, batchSize).then(prediction => {
+
+            predictButton.disabled = false;
+
+            console.log("Prediction: ", prediction)
+            document.getElementById("prediction-results").innerHTML = `<p>Prediction: ${prediction}</p>`;
+        }).catch(error => {
+            console.error('Error fetching data:', error);
+        });
+    });
 }
 
 function longTerm(dates, closeData, volumeData, closeFunctions, volumeFunctions) {
