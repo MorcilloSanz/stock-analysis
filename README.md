@@ -36,10 +36,22 @@ TensorFlow.js
 
 ## Screenshots
 
+Login:
+
+![](img/img0.png)
+
+Overall info:
+
 ![](img/img2.png)
+
+Short term analysis:
 
 ![](img/img3.png)
 
+Medium term analysis:
+
 ![](img/img4.png)
+
+Long term analysis:
 
 ![](img/img5.png)
