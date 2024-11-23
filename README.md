@@ -1,20 +1,21 @@
 # stock-analysis
 
-A personal portfolio for stock trading that utilizes various mathematical models to conduct market analysis, enabling the determination of optimal buy and sell opportunities for stocks.
+This project is a `personal portfolio for stock trading` that leverages various `mathematical models` to perform `market analysis`. It aims to identify optimal buy and sell opportunities, helping traders make informed decisions in the stock market.
 
 > [!IMPORTANT] 
-I am not responsible for any use that may be made of this software.
+I am not responsible for any use that may be made of this software. It is only made for educational purposes.
 
+> [!NOTE]
 *This project is still under development.*
 
 ## Features
-* Short term trading: decision tree.
-* Medium term trading: deep learning approach (RNN).
-* Long term trading: linear regression.
+* **Short-term trading:** Predict optimal buy and sell points using a `decision tree model`.
+* **Medium-term trading:** Predict optimal buy and sell points using a `Deep Learning approach (RNN)`.
+* **Long-term trading:** Predict optimal buy and sell points using `linear regression`.
 
 ![](img/img1.png)
 
-## Backend depencencies
+### Backend depencencies
 ```
 flask
 flask-cors
@@ -26,7 +27,7 @@ If you have Anaconda installed:
 conda env create -f environment.yml
 ```
 
-## Frontend dependencies
+### Frontend dependencies
 ```
 Bootstrap
 Chart.js
@@ -34,24 +35,14 @@ MathJax
 TensorFlow.js
 ```
 
-## Screenshots
+### Screenshots
 
-Login:
-
-![](img/img0.png)
-
-Overall info:
+**Overall info:**
 
 ![](img/img2.png)
 
-Short term analysis:
+**Market analysis:**
 
 ![](img/img3.png)
-
-Medium term analysis:
-
-![](img/img4.png)
-
-Long term analysis:
 
 ![](img/img5.png)
