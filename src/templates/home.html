@@ -207,7 +207,7 @@
 					chartMoney.update();
 
 					let totalMoney = moneys.reduce((acc, val) => acc + val, 0);
-					document.getElementById('h3-money').innerHTML = `Money <strong class="text-success">${Number(totalMoney).toFixed(2)}</strong>`;
+					document.getElementById('h3-money').innerHTML = `Money <strong class="text-success">${Number(totalMoney).toFixed(2)}$</strong>`;
 				
 				}).catch(error => {
 					console.error('Error fetching data:', error);
