@@ -302,25 +302,18 @@ function mediumTerm(dates, closeData, volumeData, closeFunctions, volumeFunction
         console.log("Starting training...");
 
         // MLP model
-        const inputSize = 6; // [ close, close derivative, close second derivative, volume, volume derivative, volume second derivative ]
-        const outputSize = 1; // [ following close ]
         const epochs = 100;
         const batchSize = 16;
 
-        let model = new Model(inputSize, outputSize);
-
         // Taining and Validation data
-        const trainingRatio = 0.99;
+        const trainingRatio = 0.75;
         const trainingDays = Math.floor(lastDays * trainingRatio);
         const testDays = lastDays - trainingDays;
         console.log(`Training days ${trainingDays} Validation days ${testDays}`);
 
         let trainCloseFunctions =  [[], [], []];
-        let testCloseFunctions =   [[], [], []];
         let trainVolumeFunctions = [[], [], []];
-        let testVolumeFunctions =  [[], [], []];
 
-        let max = 0;
         for(let i = 0; i < closeFunctions.length; i ++) {
 
             trainCloseFunctions[i] = [...closeFunctions[i]];
@@ -328,38 +321,17 @@ function mediumTerm(dates, closeData, volumeData, closeFunctions, volumeFunction
 
             trainCloseFunctions[i].splice(-testDays);
             trainVolumeFunctions[i].splice(-testDays);
-
-            testCloseFunctions[i] = [...closeFunctions[i]];
-            testVolumeFunctions[i] = [...volumeFunctions[i]];
-
-            testCloseFunctions[i].splice(0, trainingDays);
-            testVolumeFunctions[i].splice(0, trainingDays);
-
-            for(let j = 0; j < closeFunctions[i].length; j ++) {
-
-                if(closeFunctions[i][j] > max)
-                    max = closeFunctions[i][j];
-
-                if(volumeFunctions[i][j] > max)
-                    max = volumeFunctions[i][j];
-            }
         }
 
-        console.log('Max value', max)
-
-        let dataLoaderTraining = new DataLoader(trainCloseFunctions, trainVolumeFunctions, max);
+        let dataLoaderTraining = new DataLoader(trainCloseFunctions, trainVolumeFunctions);
         let xTrain = dataLoaderTraining.inputTensor();
         let yTrain = dataLoaderTraining.outputTensor();
 
-        let dataLoaderTest = new DataLoader(testCloseFunctions, testVolumeFunctions, max);
-        let xTest = dataLoaderTest.inputTensor();
-        let yTest = dataLoaderTest.outputTensor();
-
-        if(xTrain.shape[1] != inputSize)
-            console.error(`Model inputSize ${model.inputSize} input tensor shape ${xTrain.shape}`);
-
+        let model = new Model(xTrain.shape[1], 1);
+        console.log(model.inputSize);
+        
         // Training
-        model.train(xTrain, yTrain, xTest, yTest, epochs, batchSize).then(history => {
+        model.train(xTrain, yTrain, epochs, batchSize).then(history => {
 
             let lastIndex = closeFunctions[0].length - 1;
 
@@ -375,12 +347,12 @@ function mediumTerm(dates, closeData, volumeData, closeFunctions, volumeFunction
                 [volumeFunctions[2][lastIndex]]
             ];
 
-            let dataLoaderPrediction = new DataLoader(predictionCloseFunctions, predictionVolumeFunctions, max);
+            let dataLoaderPrediction = new DataLoader(predictionCloseFunctions, predictionVolumeFunctions);
             let xPrediction = dataLoaderPrediction.inputTensor(false);
 
             // Predict
             model.predict(xPrediction).then(prediction => {
-                const value = prediction.arraySync()[0][0] * max;
+                const value = prediction.arraySync()[0][0];
                 console.log(`Next close price ${value.toFixed(2)}$`);
             }).catch(error => {
                 console.error("Couldn't predict data", error);
